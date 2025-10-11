@@ -1,0 +1,27 @@
+{
+    "name": "hanafalah/satu-sehat",
+    "autoload": {
+        "psr-4": {
+            "Hanafalah\\SatuSehat\\": "src/"
+        },
+        "files":[
+            "src/helper.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "hamzah nur al falah",
+            "email": "hamzahnafalah@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hanafalah\\SatuSehat\\SatuSehatServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "hanafalah/laravel-support": "dev-main"
+    }
+}
