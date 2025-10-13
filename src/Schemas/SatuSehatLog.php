@@ -28,7 +28,7 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
         ]
     ];
 
-    protected function logSatuSehat(mixed $response,array $payload, ?array $query_params = [], ?array $response_data = []){
+    protected function logSatuSehat(mixed $response,array $payload, ?array $query_params = [], ?array $response_data = []):Model{
         return $this->prepareStoreSatuSehatLog(
             $this->requestDTO(
                 config('app.contracts.SatuSehatLogData'),[
@@ -54,9 +54,7 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
         // }else{
         //     $create = [$add];
         // }
-
         $satu_sehat_log = $this->usingEntity()->updateOrCreate(...$create);
-        dd($satu_sehat_log);
         $this->fillingProps($satu_sehat_log,$satu_sehat_log_dto->props);
         $satu_sehat_log->save();
         return $this->satu_sehat_log_model = $satu_sehat_log;

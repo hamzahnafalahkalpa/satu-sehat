@@ -20,4 +20,8 @@ class SatuSehatLogData extends Data implements DataSatuSehatLogData
     #[MapInputName('props')]
     #[MapName('props')]
     public ?array $props = null;
+
+    public static function before(array &$attributes){
+        $attributes['name'] ??= 'SatuSehatLog';
+    }
 }

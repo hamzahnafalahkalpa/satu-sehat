@@ -5,6 +5,8 @@ namespace Hanafalah\SatuSehat\Schemas;
 use Hanafalah\SatuSehat\Contracts\Schemas\OAuth2 as ContractsOAuth2;
 use Hanafalah\SatuSehat\Contracts\Data\OAuth2Data;
 use Hanafalah\SatuSehat\Facades\SatuSehat;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class OAuth2 extends SatuSehatLog implements ContractsOAuth2
 {
@@ -20,13 +22,18 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
         ]
     ];
 
-    public function generateToken(OAuth2Data $o_auth2_dto){
+    public function prepareStoreOauth2(OAuth2Data $o_auth2_dto): Model{
         $satu_sehat = SatuSehat::auth('accesstoken?grant_type='.$o_auth2_dto->grant_type,[
             'client_id'     => $o_auth2_dto->client_id,
             'client_secret' => $o_auth2_dto->client_secret
         ]);
-        $this->logSatuSehat(SatuSehat::getResponse(),SatuSehat::getPayload(),[
+        $this->o_auth2_model = $this->logSatuSehat(SatuSehat::getResponse(),SatuSehat::getPayload(),[
             'grant_type' => $o_auth2_dto->grant_type
         ],$satu_sehat);
+        return $this->o_auth2_model;
+    }
+
+    public function oauth2(mixed $conditionals = null): Builder{
+        return $this->satuSehatLog($conditionals);
     }
 }

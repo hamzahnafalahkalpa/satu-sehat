@@ -23,6 +23,7 @@ class OAuth2Data extends SatuSehatLogData implements DataOAuth2Data
     public ?string $grant_type = null;
 
     public static function before(array &$attributes){
+        $attributes['name'] ??= 'OAuth2';
         $attributes['grant_type']   ??= 'client_credentials';
         $attributes['client_id']     = SatuSehat::getClientId();
         $attributes['client_secret'] = SatuSehat::getClientSecret();

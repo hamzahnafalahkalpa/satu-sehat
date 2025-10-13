@@ -1,10 +1,10 @@
 <?php
 
-namespace Hanafalah\SatuSehat\Resources\OAuth2;
+namespace Hanafalah\SatuSehat\Resources\PatientSatuSehat;
 
-use Hanafalah\SatuSehat\Resources\SatuSehatLog\ViewSatuSehatLog;
+use Hanafalah\LaravelSupport\Resources\ApiResource;
 
-class ViewOAuth2 extends ViewSatuSehatLog
+class ViewPatientSatuSehat extends ApiResource
 {
   /**
    * Transform the resource into an array.
@@ -14,9 +14,7 @@ class ViewOAuth2 extends ViewSatuSehatLog
    */
   public function toArray(\Illuminate\Http\Request $request): array
   {
-    $arr = [
-    ];
-    $arr = $this->mergeArray(parent::toArray($request),$arr);
+    $arr = parent::toArray($request);
     return $arr;
   }
 }

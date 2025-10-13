@@ -30,5 +30,5 @@ use Illuminate\Database\Eloquent\Model;
 
 interface OAuth2 extends SatuSehatLog
 {
-    public function generateToken(OAuth2Data $o_auth2_dto);
+    public function prepareStoreOauth2(OAuth2Data $o_auth2_dto): Model;
 }
