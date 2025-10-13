@@ -35,7 +35,7 @@ trait HasHost{
     }
 
     public function getHost(?string $host_type = null, ?string $env_type = null): array|string{
-        if (isset($host_type) && isset($env_type) && isset($host)){
+        if (isset($host_type) && isset($env_type)){
             return $this->__hosts[$host_type][$env_type];
         }
         return $this->__hosts;

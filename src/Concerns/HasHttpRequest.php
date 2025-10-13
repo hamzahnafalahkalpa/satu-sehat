@@ -8,12 +8,16 @@ trait HasHttpRequest{
     use HasHeader;
 
     protected $__http;
+    protected $__response;
+    protected $__payload;
 
     public function initializeHttp(){
-        $this->sethHttp(Http::withHeaders($this->__headers));
+        $this->setHttp(Http::record(function($http){
+            $http->withHeaders($this->__headers);
+        }));
     }
 
-    public function setHttp(Http $http): self{
+    public function setHttp($http): self{
         $this->__http = $http;
         return $this;
     }
@@ -27,11 +31,20 @@ trait HasHttpRequest{
         return $this;
     }
 
-    protected function postAuth(?string $url = 'accesstoken',$payload, ?callable $on_success = null, ?callable $on_failed = null): self{
-        $url = ltrim($url, '/');
-        $response = $this->http()->post($this->getCurrentAuthHost().'/'.$url, $payload);
-        $this->responseHandler($response, $on_success, $on_failed);
-        return $this;
+    protected function postAuth(?string $url = 'accesstoken',$payload, ?callable $on_success = null, ?callable $on_failed = null){
+        $url = ltrim($url, '/');    
+        $response = $this->http()->asForm()->post($this->getCurrentAuthHost().'/'.$url, $payload);
+        $this->__response = $response;
+        $this->__payload = $payload;
+        return $this->responseHandler($response, $on_success, $on_failed);
+    }
+
+    public function getResponse(){
+        return $this->__response;
+    }
+
+    public function getPayload(){
+        return $this->__payload;
     }
 
     protected function responseHandler($response, ?callable $on_success = null, ?callable $on_failed = null){

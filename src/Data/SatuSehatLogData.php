@@ -3,11 +3,11 @@
 namespace Hanafalah\SatuSehat\Data;
 
 use Hanafalah\LaravelSupport\Supports\Data;
-use Hanafalah\SatuSehat\Contracts\Data\SatuSehatTokenData as DataSatuSehatTokenData;
+use Hanafalah\SatuSehat\Contracts\Data\SatuSehatLogData as DataSatuSehatLogData;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 
-class SatuSehatTokenData extends Data implements DataSatuSehatTokenData
+class SatuSehatLogData extends Data implements DataSatuSehatLogData
 {
     #[MapInputName('id')]
     #[MapName('id')]
@@ -15,7 +15,7 @@ class SatuSehatTokenData extends Data implements DataSatuSehatTokenData
 
     #[MapInputName('name')]
     #[MapName('name')]
-    public string $name;
+    public ?string $name = null;
 
     #[MapInputName('props')]
     #[MapName('props')]

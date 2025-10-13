@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method array storeMultipleOAuth2(array $datas)
  */
 
-interface OAuth2 extends DataManagement
+interface OAuth2 extends SatuSehatLog
 {
     public function generateToken(OAuth2Data $o_auth2_dto);
 }

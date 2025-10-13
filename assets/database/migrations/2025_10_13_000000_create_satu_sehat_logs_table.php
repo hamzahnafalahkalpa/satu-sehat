@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Hanafalah\SatuSehat\Models\{
-    SatuSehatToken
+    SatuSehatLog
 };
 
 return new class extends Migration
@@ -15,7 +15,7 @@ return new class extends Migration
 
     public function __construct()
     {
-        $this->__table = app(config('database.models.SatuSehatToken', SatuSehatToken::class));
+        $this->__table = app(config('database.models.SatuSehatLog', SatuSehatLog::class));
     }
 
     /**

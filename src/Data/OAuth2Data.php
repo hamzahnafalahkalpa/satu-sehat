@@ -8,7 +8,7 @@ use Hanafalah\SatuSehat\Facades\SatuSehat;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 
-class OAuth2Data extends Data implements DataOAuth2Data
+class OAuth2Data extends SatuSehatLogData implements DataOAuth2Data
 {
     #[MapInputName('client_id')]
     #[MapName('client_id')]

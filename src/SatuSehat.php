@@ -18,7 +18,7 @@ class SatuSehat extends BaseSatuSehat implements ContractsSatuSehat {
 
     }
 
-    public function auth(string $url, array $payload, ?callable $on_success, ?callable $on_failed){
+    public function auth(string $url, array $payload, ?callable $on_success = null, ?callable $on_failed = null){
         return $this->postAuth($url, $payload, $on_success, $on_failed);
     }
 }

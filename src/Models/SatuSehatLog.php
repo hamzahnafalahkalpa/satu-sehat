@@ -5,13 +5,13 @@ namespace Hanafalah\SatuSehat\Models;
 use Hanafalah\LaravelHasProps\Concerns\HasProps;
 use Hanafalah\LaravelSupport\Models\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Hanafalah\SatuSehat\Resources\SatuSehatToken\{
-    ViewSatuSehatToken,
-    ShowSatuSehatToken
+use Hanafalah\SatuSehat\Resources\SatuSehatLog\{
+    ViewSatuSehatLog,
+    ShowSatuSehatLog
 };
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
-class SatuSehatToken extends BaseModel
+class SatuSehatLog extends BaseModel
 {
     use HasUlids, HasProps, SoftDeletes;
     
@@ -28,7 +28,6 @@ class SatuSehatToken extends BaseModel
         'name' => 'string'
     ];
 
-    
     public function viewUsingRelation(): array{
         return [];
     }
@@ -38,11 +37,11 @@ class SatuSehatToken extends BaseModel
     }
 
     public function getViewResource(){
-        return ViewSatuSehatToken::class;
+        return ViewSatuSehatLog::class;
     }
 
     public function getShowResource(){
-        return ShowSatuSehatToken::class;
+        return ShowSatuSehatLog::class;
     }
 
     
