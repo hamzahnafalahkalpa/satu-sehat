@@ -9,6 +9,7 @@ use Hanafalah\SatuSehat\{
 };
 use Hanafalah\SatuSehat\Contracts\Schemas\SatuSehatLog as ContractsSatuSehatLog;
 use Hanafalah\SatuSehat\Contracts\Data\SatuSehatLogData;
+use Hanafalah\SatuSehat\Facades\SatuSehat;
 
 class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
 {
@@ -28,10 +29,13 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
         ]
     ];
 
-    protected function logSatuSehat(mixed $response,array $payload, ?array $query_params = [], ?array $response_data = []):Model{
+    protected function logSatuSehat(mixed $response, array $response_data, ?array $payload = [], ?array $query_params = []):Model{
         return $this->prepareStoreSatuSehatLog(
             $this->requestDTO(
                 config('app.contracts.SatuSehatLogData'),[
+                    'name' => $this->__entity,
+                    'env_type' => config('satu-sehat.environment.env_type'),
+                    'url' => SatuSehat::getSatuSehatUrl(),
                     'name' => $this->__entity,
                     'status_code' => $response->getStatusCode(),
                     'headers' => $response->getHeaders(),
@@ -44,16 +48,12 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
 
     public function prepareStoreSatuSehatLog(SatuSehatLogData $satu_sehat_log_dto): Model{
         $add = [
-            'name' => $satu_sehat_log_dto->name
+            'name' => $satu_sehat_log_dto->name,
+            'env_type' => $satu_sehat_log_dto->env_type,
+            'url' => $satu_sehat_log_dto->url
         ];
         $guard  = ['id' => $satu_sehat_log_dto->id];
         $create = [$guard, $add];
-        // if (isset($satu_sehat_log_dto->id)){
-        //     $guard  = ['id' => $satu_sehat_log_dto->id];
-        //     $create = [$guard, $add];
-        // }else{
-        //     $create = [$add];
-        // }
         $satu_sehat_log = $this->usingEntity()->updateOrCreate(...$create);
         $this->fillingProps($satu_sehat_log,$satu_sehat_log_dto->props);
         $satu_sehat_log->save();

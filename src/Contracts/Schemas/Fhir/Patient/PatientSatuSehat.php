@@ -1,10 +1,11 @@
 <?php
 
-namespace Hanafalah\SatuSehat\Contracts\Schemas;
+namespace Hanafalah\SatuSehat\Contracts\Schemas\Fhir\Patient;
 
-use Hanafalah\SatuSehat\Contracts\Data\PatientSatuSehatData;
+use Hanafalah\SatuSehat\Contracts\Data\Fhir\Patient\PatientSatuSehatData;
 //use Hanafalah\SatuSehat\Contracts\Data\PatientSatuSehatUpdateData;
 use Hanafalah\LaravelSupport\Contracts\Supports\DataManagement;
+use Hanafalah\SatuSehat\Contracts\Schemas\OAuth2;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,7 +29,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method array storeMultiplePatientSatuSehat(array $datas)
  */
 
-interface PatientSatuSehat extends SatuSehatLog
+interface PatientSatuSehat extends OAuth2
 {
     public function prepareStorePatientSatuSehat(PatientSatuSehatData $patient_satu_sehat_dto): Model;
 }

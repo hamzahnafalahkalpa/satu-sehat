@@ -2,7 +2,6 @@
 
 namespace Hanafalah\SatuSehat\Data;
 
-use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\SatuSehat\Contracts\Data\OAuth2Data as DataOAuth2Data;
 use Hanafalah\SatuSehat\Facades\SatuSehat;
 use Spatie\LaravelData\Attributes\MapInputName;
@@ -18,11 +17,16 @@ class OAuth2Data extends SatuSehatLogData implements DataOAuth2Data
     #[MapName('client_secret')]
     public ?string $client_secret = null;
 
+    #[MapInputName('access_validation')]
+    #[MapName('access_validation')]
+    public ?bool $access_validation = true;
+
     #[MapInputName('grant_type')]
     #[MapName('grant_type')]
     public ?string $grant_type = null;
 
     public static function before(array &$attributes){
+        $attributes['access_validation'] ??= true;
         $attributes['name'] ??= 'OAuth2';
         $attributes['grant_type']   ??= 'client_credentials';
         $attributes['client_id']     = SatuSehat::getClientId();

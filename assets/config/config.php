@@ -7,7 +7,7 @@ use Hanafalah\SatuSehat\{
 };
 
 return [
-    "env_type" => env('SS_ENV_TYPE','DEV'),
+    "env_type" => env('SS_ENV_TYPE','STG'),
     "environment"=> [],
     "credentials"=> [],
     "namespace"     => "Hanafalah\SatuSehat",

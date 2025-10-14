@@ -11,10 +11,12 @@ trait HasHttpRequest{
     protected $__response;
     protected $__payload;
 
-    public function initializeHttp(){
-        $this->setHttp(Http::record(function($http){
-            $http->withHeaders($this->__headers);
-        }));
+    public function initializeHttp(){ 
+        // $this->setHttp(Http::record(function($http){
+        //     $http->withHeaders($this->__headers);
+        // }));
+
+        $this->setHttp(Http::withHeaders($this->__headers));
     }
 
     public function setHttp($http): self{
@@ -23,6 +25,7 @@ trait HasHttpRequest{
     }
 
     public function http(){
+        $this->initializeHttp();
         return $this->__http;
     }
 
@@ -33,7 +36,8 @@ trait HasHttpRequest{
 
     protected function postAuth(?string $url = 'accesstoken',$payload, ?callable $on_success = null, ?callable $on_failed = null){
         $url = ltrim($url, '/');    
-        $response = $this->http()->asForm()->post($this->getCurrentAuthHost().'/'.$url, $payload);
+        $this->__satu_sehat_url = $this->getCurrentAuthHost().'/'.$url;
+        $response = $this->http()->asForm()->post($this->__satu_sehat_url, $payload);
         $this->__response = $response;
         $this->__payload = $payload;
         return $this->responseHandler($response, $on_success, $on_failed);
@@ -45,6 +49,10 @@ trait HasHttpRequest{
 
     public function getPayload(){
         return $this->__payload;
+    }
+
+    public function getSatuSehatUrl(){
+        return $this->__satu_sehat_url;
     }
 
     protected function responseHandler($response, ?callable $on_success = null, ?callable $on_failed = null){

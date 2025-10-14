@@ -14,6 +14,7 @@ class BaseSatuSehat extends PackageManagement implements SupportsBaseSatuSehat
 
     protected $__config_name = 'satu-sehat';
     protected $__satu_sehat_config = [];
+    protected ?string $__satu_sehat_url;
 
     /**
      * A description of the entire PHP function.
@@ -28,6 +29,4 @@ class BaseSatuSehat extends PackageManagement implements SupportsBaseSatuSehat
         $this->setEnvironment();
         parent::__construct();
     }
-
-
 }

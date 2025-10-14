@@ -13,9 +13,8 @@ trait HasEnvironment{
     ];
 
     public function setEnvironment(?string $env_type = null){
-        $env_type ??= config('satu-sehat.env_type','DEV');
+        $env_type ??= config('satu-sehat.env_type','STG');
         $this->setDefaultHosts()->setCredentialsDefault();
-        $this->initializeHttp();
 
         $this->__satu_sehat_env = config('satu-sehat.environment',[]);
         $this->__current_auth_host = $this->getHost('AUTH', $env_type);
@@ -55,13 +54,12 @@ trait HasEnvironment{
     }
 
     public function setCredentialsDefault(): self{
-        $env_type = config('satu-sehat.env_type','DEV');
         $config_credentials = config('environment.credentials',[
             'client_id' => null,
             'client_secret' => null
         ]);
-        $client_id = $config_credentials['client_id'] ?? env('SS_CLIENT_ID_'.Str::upper($env_type));
-        $client_secret = $config_credentials['client_secret'] ?? env('SS_CLIENT_SECRET_'.Str::upper($env_type));
+        $client_id = $config_credentials['client_id'] ?? env('SS_CLIENT_ID');
+        $client_secret = $config_credentials['client_secret'] ?? env('SS_CLIENT_SECRET');
         $this->setCredential('client_id', $client_id)
             ->setCredential('client_secret', $client_secret);
         return $this;

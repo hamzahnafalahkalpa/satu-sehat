@@ -4,7 +4,6 @@ namespace Hanafalah\SatuSehat\Models;
 
 use Hanafalah\LaravelHasProps\Concerns\HasProps;
 use Hanafalah\LaravelSupport\Models\BaseModel;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Hanafalah\SatuSehat\Resources\SatuSehatLog\{
     ViewSatuSehatLog,
     ShowSatuSehatLog
@@ -13,7 +12,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
 class SatuSehatLog extends BaseModel
 {
-    use HasUlids, HasProps, SoftDeletes;
+    use HasUlids, HasProps;
     
     public $incrementing  = false;
     protected $keyType    = 'string';
@@ -21,7 +20,9 @@ class SatuSehatLog extends BaseModel
     public $list = [
         'id',
         'name',
-        'props',
+        'env_type',
+        'url',
+        'props'
     ];
 
     protected $casts = [
@@ -43,8 +44,4 @@ class SatuSehatLog extends BaseModel
     public function getShowResource(){
         return ShowSatuSehatLog::class;
     }
-
-    
-
-    
 }

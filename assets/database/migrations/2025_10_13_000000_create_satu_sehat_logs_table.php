@@ -30,9 +30,10 @@ return new class extends Migration
             Schema::create($table_name, function (Blueprint $table) {
                 $table->ulid('id')->primary();
                 $table->string('name', 255)->nullable(false);
+                $table->string('env_type', 100)->nullable(false);
+                $table->text('url')->nullable(false);
                 $table->json('props')->nullable();
                 $table->timestamps();
-                $table->softDeletes();
             });
         }
     }

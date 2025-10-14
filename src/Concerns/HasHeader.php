@@ -1,7 +1,7 @@
 <?php
 
 namespace Hanafalah\SatuSehat\Concerns;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 
 trait HasHeader{
     protected $__headers = [
@@ -11,6 +11,9 @@ trait HasHeader{
 
     public function setHeader(string $key, string $value): self{
         $this->__headers[$key] = $value;
+        $this->setHttp(Http::record(function($http){
+            $http->withHeaders($this->__headers);
+        }));
         return $this;
     }
 
