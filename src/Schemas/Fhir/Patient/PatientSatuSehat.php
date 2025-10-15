@@ -1,12 +1,15 @@
 <?php
 
-namespace Hanafalah\SatuSehat\Schemas;
+namespace Hanafalah\SatuSehat\Schemas\Fhir\Patient;
 
+use Hanafalah\SatuSehat\Contracts\Data\Fhir\Patient\PatientSatuSehatData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Hanafalah\SatuSehat\Contracts\Schemas\PatientSatuSehat as ContractsPatientSatuSehat;
-use Hanafalah\SatuSehat\Contracts\Data\PatientSatuSehatData;
+use Hanafalah\SatuSehat\Contracts\Schemas\Fhir\Patient\{
+    PatientSatuSehat as ContractsPatientSatuSehat
+};
 use Hanafalah\SatuSehat\Facades\SatuSehat;
+use Hanafalah\SatuSehat\Schemas\OAuth2;
 use Illuminate\Support\Collection;
 
 class PatientSatuSehat extends OAuth2 implements ContractsPatientSatuSehat

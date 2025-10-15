@@ -13,4 +13,20 @@ class MultipleAddressSatuSehatData extends Data implements DataMultipleAddressSa
     #[MapInputName('home')]
     #[MapName('home')]
     public ?AddressSatuSehatData $home = null;
+
+    #[MapInputName('work')]
+    #[MapName('work')]
+    public ?AddressSatuSehatData $work = null;
+
+    #[MapInputName('temp')]
+    #[MapName('temp')]
+    public ?AddressSatuSehatData $temp = null;
+
+    #[MapInputName('old')]
+    #[MapName('old')]
+    public ?AddressSatuSehatData $old = null;
+
+    #[MapInputName('billing')]
+    #[MapName('billing')]
+    public ?AddressSatuSehatData $billing = null;
 }
