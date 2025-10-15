@@ -38,6 +38,7 @@ class PatientSatuSehat extends OAuth2 implements ContractsPatientSatuSehat
     }
 
     public function prepareStorePatientSatuSehat(PatientSatuSehatData $patient_satu_sehat_dto): Model{
+        dd($patient_satu_sehat_dto);
         $add = [
             'name' => $patient_satu_sehat_dto->name
         ];
