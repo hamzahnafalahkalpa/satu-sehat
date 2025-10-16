@@ -8,13 +8,13 @@ use Hanafalah\SatuSehat\Data\Fhir\Patient\Form\Address\PatientFormAddressExtensi
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
-use Spatie\LaravelData\Attributes\Validation\Enum;
+use Spatie\LaravelData\Attributes\Validation\In;
 
 class PatientFormAddressData extends Data implements DataPatientFormAddressData
 {
     #[MapInputName('use')]
     #[MapName('use')]
-    #[Enum('home','work','temp','old','billing')]
+    #[In('home','work','temp','old','billing')]
     public ?string $use = 'home';
 
     #[MapInputName('line')]
@@ -35,7 +35,6 @@ class PatientFormAddressData extends Data implements DataPatientFormAddressData
 
     #[MapInputName('extension')]
     #[MapName('extension')]
-    #[DataCollectionOf(PatientFormAddressExtensionData::class)]
     public ?array $extension = [];
 
     public static function before(array &$attributes){

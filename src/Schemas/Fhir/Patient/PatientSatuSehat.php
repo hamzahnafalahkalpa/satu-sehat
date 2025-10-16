@@ -38,24 +38,20 @@ class PatientSatuSehat extends OAuth2 implements ContractsPatientSatuSehat
     }
 
     public function prepareStorePatientSatuSehat(PatientSatuSehatData $patient_satu_sehat_dto): Model{
-        dd($patient_satu_sehat_dto);
-        $add = [
-            'name' => $patient_satu_sehat_dto->name
-        ];
-        $guard  = ['id' => $patient_satu_sehat_dto->id];
-        $create = [$guard, $add];
-
-        $patient_satu_sehat = $this->usingEntity()->updateOrCreate(...$create);
-        $this->fillingProps($patient_satu_sehat,$patient_satu_sehat_dto->props);
-        $patient_satu_sehat->save();
-        return $this->patient_satu_sehat_model = $patient_satu_sehat;
+        $patient = SatuSehat::store('Patient',$patient_satu_sehat_dto->form->payload->toArray());
+        $this->patient_satu_sehat_model = $this->logSatuSehat(SatuSehat::getResponse(),$patient,SatuSehat::getPayload());
+        return $this->patient_satu_sehat_model;
     }
 
     public function prepareViewPatientSatuSehatList(?PatientSatuSehatData $patient_satu_sehat_dto = null): Collection{
         $patient_satu_sehat_dto ??= $this->requestDTO(config('app.contracts.PatientSatuSehatData'));
         $satu_sehat = SatuSehat::get('Patient'.$patient_satu_sehat_dto->params->query);
-        $this->o_auth2_model = $this->logSatuSehat(SatuSehat::getResponse(),$satu_sehat);
+        $this->patient_satu_sehat_model = $this->logSatuSehat(SatuSehat::getResponse(),$satu_sehat);
         return collect($satu_sehat['entry']);
+    }
+
+    public function prepareUpdatePatientSatuSehat(PatientSatuSehatData $patient_satu_sehat_dto): Model{
+        
     }
 
     public function patientSatuSehat(mixed $conditionals = null): Builder{

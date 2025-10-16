@@ -1,15 +1,15 @@
 <?php
 
-namespace Hanafalah\SatuSehat\Data\Fhir\Patient;
+namespace Hanafalah\SatuSehat\Data\Fhir\Practitioner;
 
 use Hanafalah\SatuSehat\Data\ParamSatuSehatData;
-use Hanafalah\SatuSehat\Contracts\Data\Fhir\Patient\ParamPatientSatuSehatData as DataParamPatientSatuSehatData;
+use Hanafalah\SatuSehat\Contracts\Data\Fhir\Practitioner\ParamPractitionerSatuSehatData as DataParamPractitionerSatuSehatData;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 use Spatie\LaravelData\Attributes\Validation\DateFormat;
 use Illuminate\Support\Str;
 
-class ParamPatientSatuSehatData extends ParamSatuSehatData implements DataParamPatientSatuSehatData
+class ParamPractitionerSatuSehatData extends ParamSatuSehatData implements DataParamPractitionerSatuSehatData
 {
     #[MapInputName('name')]
     #[MapName('name')]

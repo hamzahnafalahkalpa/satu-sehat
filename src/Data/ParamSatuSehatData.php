@@ -1,9 +1,9 @@
 <?php
 
-namespace Hanafalah\SatuSehat\Data\Fhir\Patient;
+namespace Hanafalah\SatuSehat\Data;
 
 use Hanafalah\LaravelSupport\Supports\Data;
-use Hanafalah\SatuSehat\Contracts\Data\Fhir\Patient\ParamSatuSehatData as DataParamSatuSehatData;
+use Hanafalah\SatuSehat\Contracts\Data\ParamSatuSehatData as DataParamSatuSehatData;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 

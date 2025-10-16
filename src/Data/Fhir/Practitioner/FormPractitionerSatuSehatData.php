@@ -1,11 +1,11 @@
 <?php
 
-namespace Hanafalah\SatuSehat\Data\Fhir\Patient;
+namespace Hanafalah\SatuSehat\Data\Fhir\Practitioner;
 
 use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\SatuSehat\Contracts\Data\Fhir\MultipleAddressSatuSehatData;
-use Hanafalah\SatuSehat\Contracts\Data\Fhir\Patient\FormPatientSatuSehatData as DataFormPatientSatuSehatData;
-use Hanafalah\SatuSehat\Contracts\Data\Fhir\Patient\Form\PatientPayloadData;
+use Hanafalah\SatuSehat\Contracts\Data\Fhir\Practitioner\FormPractitionerSatuSehatData as DataFormPractitionerSatuSehatData;
+use Hanafalah\SatuSehat\Contracts\Data\Fhir\Practitioner\Form\PractitionerPayloadData;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 use Spatie\LaravelData\Attributes\Validation\DateFormat;
@@ -13,7 +13,7 @@ use Spatie\LaravelData\Attributes\Validation\BooleanType;
 use Illuminate\Support\Str;
 use Spatie\LaravelData\Attributes\Validation\In;
 
-class FormPatientSatuSehatData extends Data implements DataFormPatientSatuSehatData
+class FormPractitionerSatuSehatData extends Data implements DataFormPractitionerSatuSehatData
 {
     #[MapInputName('ihs_number')]
     #[MapName('ihs_number')]
@@ -50,9 +50,9 @@ class FormPatientSatuSehatData extends Data implements DataFormPatientSatuSehatD
     #[BooleanType]
     public ?bool $deceased_boolean = false;
 
-    #[MapInputName('payload')]
-    #[MapName('payload')]
-    public ?PatientPayloadData $payload = null;
+    // #[MapInputName('payload')]
+    // #[MapName('payload')]
+    // public ?PractitionerPayloadData $payload = null;
 
     #[MapInputName('address')]
     #[MapName('address')]

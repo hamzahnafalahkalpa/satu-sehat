@@ -19,8 +19,16 @@ class SatuSehat extends BaseSatuSehat implements ContractsSatuSehat {
         return $this->responseHandler($response, $on_success, $on_failed);
     }
 
-    public function store(string $url){
+    public function store(string $url, array $payload, ?callable $on_success = null, ?callable $on_failed = null){
         $url = ltrim($url, '/');
+        $this->setHttp(Http::record(function($http){
+            $http->withHeaders($this->__headers);
+        }));
+        $this->__satu_sehat_url = $this->getCurrentFhirHost().'/'.$url;
+        $response = $this->http()->post($this->__satu_sehat_url, $payload);
+        $this->__response = $response;
+        $this->__payload = $payload;
+        return $this->responseHandler($response, $on_success, $on_failed);
     }
 
     public function auth(string $url, array $payload, ?callable $on_success = null, ?callable $on_failed = null){

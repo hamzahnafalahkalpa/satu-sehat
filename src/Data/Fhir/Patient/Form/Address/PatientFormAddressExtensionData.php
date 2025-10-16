@@ -6,13 +6,13 @@ use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\SatuSehat\Contracts\Data\Fhir\Patient\Form\Address\PatientFormAddressExtensionData as DataPatientFormAddressExtensionData;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
-use Spatie\LaravelData\Attributes\Validation\Enum;
+use Spatie\LaravelData\Attributes\Validation\In;
 
 class PatientFormAddressExtensionData extends Data implements DataPatientFormAddressExtensionData
 {
     #[MapInputName('use')]
     #[MapName('use')]
-    #[Enum('home','work','temp','old','billing')]
+    #[In('home','work','temp','old','billing')]
     public ?string $use = 'home';
 
     #[MapInputName('line')]

@@ -13,7 +13,7 @@ class PatientPayloadData extends Data implements DataPatientPayloadData
 {
     #[MapInputName('resourceType')]
     #[MapName('resourceType')]
-    public string $resourceType = 'Patient';
+    public ?string $resourceType = 'Patient';
 
     #[MapInputName('meta')]
     #[MapName('meta')]
@@ -21,11 +21,13 @@ class PatientPayloadData extends Data implements DataPatientPayloadData
 
     #[MapInputName('identifier')]
     #[MapName('identifier')]
-    public ?PatientFormIdentifierData $identifier = null;
+    #[DataCollectionOf(PatientFormIdentifierData::class)]
+    public ?array $identifier = null;
 
     #[MapInputName('name')]
     #[MapName('name')]
-    public ?PatientFormNameData $name = null;
+    #[DataCollectionOf(PatientFormNameData::class)]
+    public ?array $name = null;
 
     #[MapInputName('active')]
     #[MapName('active')]
@@ -49,10 +51,16 @@ class PatientPayloadData extends Data implements DataPatientPayloadData
     #[MapName('deceasedBoolean')]
     public ?bool $deceasedBoolean = false;
 
+    #[MapInputName('multipleBirthInteger')]
+    #[MapName('multipleBirthInteger')]
+    public ?int $multipleBirthInteger = 0;
+
     public static function before(array &$attributes){
+        $attributes['resourceType'] ??= 'Patient';
         $attributes['deceasedBoolean'] ??= false;
+        $attributes['multipleBirthInteger'] ??= 0;
         $attributes['active'] ??= true;
-        $attributes['meta'] = (object) [
+        $attributes['meta'] = [
             "profile" => [
                 "https://fhir.kemkes.go.id/r4/StructureDefinition/Patient"
             ]
