@@ -28,10 +28,6 @@ class ParamPractitionerSatuSehatData extends ParamSatuSehatData implements DataP
     #[MapName('nik')]
     public ?string $nik = null;
 
-    #[MapInputName('nik_ibu')]
-    #[MapName('nik_ibu')]
-    public ?string $nik_ibu = null;
-
     public static function before(array &$attributes){
         $new = static::new();
         $serialize = [
@@ -43,11 +39,6 @@ class ParamPractitionerSatuSehatData extends ParamSatuSehatData implements DataP
             if (!Str::contains($attributes['nik'],'https://fhir.kemkes.go.id/id/nik'))
                 $attributes['nik'] = 'https://fhir.kemkes.go.id/id/nik|'.$attributes['nik'];
             $serialize['identifier'] = $attributes['nik'] ?? null;
-        }
-        if (isset($attributes['nik_ibu'])){            
-            if (!Str::contains($attributes['nik_ibu'],'https://fhir.kemkes.go.id/id/nik-ibu')) 
-                $attributes['nik_ibu'] = 'https://fhir.kemkes.go.id/id/nik-ibu|'.$attributes['nik_ibu'];
-            $serialize['identifier'] = $attributes['nik_ibu'] ?? null;
         }
         $attributes['query'] = $new->serialize($serialize);
     }

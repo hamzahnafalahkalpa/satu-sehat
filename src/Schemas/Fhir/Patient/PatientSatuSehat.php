@@ -50,10 +50,6 @@ class PatientSatuSehat extends OAuth2 implements ContractsPatientSatuSehat
         return collect($satu_sehat['entry']);
     }
 
-    public function prepareUpdatePatientSatuSehat(PatientSatuSehatData $patient_satu_sehat_dto): Model{
-        
-    }
-
     public function patientSatuSehat(mixed $conditionals = null): Builder{
         return $this->satuSehatLog($conditionals);
     }
