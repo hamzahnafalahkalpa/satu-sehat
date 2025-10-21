@@ -1,8 +1,8 @@
 <?php
 
-namespace Hanafalah\SatuSehat\Resources\Encounter;
+namespace Hanafalah\SatuSehat\Resources\EncounterSatuSehat;
 
-class ShowEncounter extends ViewEncounter
+class ShowEncounterSatuSehat extends ViewEncounterSatuSehat
 {
   /**
    * Transform the resource into an array.

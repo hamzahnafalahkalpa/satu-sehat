@@ -1,10 +1,10 @@
 <?php
 
-namespace Hanafalah\SatuSehat\Resources\Encounter;
+namespace Hanafalah\SatuSehat\Resources\EncounterSatuSehat;
 
 use Hanafalah\LaravelSupport\Resources\ApiResource;
 
-class ViewEncounter extends ApiResource
+class ViewEncounterSatuSehat extends ApiResource
 {
   /**
    * Transform the resource into an array.
