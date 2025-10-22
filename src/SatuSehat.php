@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Http;
 class SatuSehat extends BaseSatuSehat implements ContractsSatuSehat {
     const LOWER_CLASS_NAME = "satu_sehat";
     protected ?string $__access_token = null;
+    protected ?object $__organization = null;
 
     public function get(string $url, ?callable $on_success = null, ?callable $on_failed = null){
         $url = ltrim($url, '/');
@@ -44,6 +45,15 @@ class SatuSehat extends BaseSatuSehat implements ContractsSatuSehat {
 
     public function setAccessToken(string $token): self{
         $this->__access_token = $token;
+        return $this;
+    }
+
+    public function getOrganization(): ?string{
+        return $this->__organization;
+    }
+
+    public function setOrganization(object $organization): self{
+        $this->__organization = $organization;
         return $this;
     }
 }

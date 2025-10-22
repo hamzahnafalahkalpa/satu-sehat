@@ -7,7 +7,6 @@ use Hanafalah\SatuSehat\Contracts\Data\Fhir\Organization\Form\OrganizationPayloa
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
-use Spatie\LaravelData\Attributes\Validation\DateFormat;
 
 class OrganizationPayloadData extends Data implements DataOrganizationPayloadData
 {
@@ -15,55 +14,38 @@ class OrganizationPayloadData extends Data implements DataOrganizationPayloadDat
     #[MapName('resourceType')]
     public ?string $resourceType = 'Organization';
 
-    #[MapInputName('meta')]
-    #[MapName('meta')]
-    public ?array $meta = [];
+    #[MapInputName('active')]
+    #[MapName('active')]
+    public ?bool $active = true;
 
     #[MapInputName('identifier')]
     #[MapName('identifier')]
     #[DataCollectionOf(OrganizationFormIdentifierData::class)]
     public ?array $identifier = null;
 
+    #[MapInputName('type')]
+    #[MapName('type')]
+    public ?array $type;
+
     #[MapInputName('name')]
     #[MapName('name')]
-    #[DataCollectionOf(OrganizationFormNameData::class)]
-    public ?array $name = null;
+    public ?string $name;
 
-    #[MapInputName('active')]
-    #[MapName('active')]
-    public ?bool $active = true;
-
-    #[MapInputName('gender')]
-    #[MapName('gender')]
-    public ?string $gender;
-
-    #[MapInputName('birthDate')]
-    #[MapName('birthDate')]
-    #[DateFormat('Y-m-d')]
-    public ?string $birthDate;
+    #[MapInputName('telecom')]
+    #[MapName('telecom')]
+    public ?string $telecom;
 
     #[MapInputName('address')]
     #[MapName('address')]
     #[DataCollectionOf(OrganizationFormAddressData::class)]
     public ?array $address = [];
 
-    #[MapInputName('deceasedBoolean')]
-    #[MapName('deceasedBoolean')]
-    public ?bool $deceasedBoolean = false;
-
-    #[MapInputName('multipleBirthInteger')]
-    #[MapName('multipleBirthInteger')]
-    public ?int $multipleBirthInteger = 0;
+    #[MapInputName('partOf')]
+    #[MapName('partOf')]
+    public ?array $partOf = [];
 
     public static function before(array &$attributes){
         $attributes['resourceType'] ??= 'Organization';
-        $attributes['deceasedBoolean'] ??= false;
-        $attributes['multipleBirthInteger'] ??= 0;
-        $attributes['active'] ??= true;
-        $attributes['meta'] = [
-            "profile" => [
-                "https://fhir.kemkes.go.id/r4/StructureDefinition/Organization"
-            ]
-        ];
+        $attributes['active'] ??= true;        
     }
 }

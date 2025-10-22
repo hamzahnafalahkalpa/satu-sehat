@@ -1,6 +1,6 @@
 <?php
 
-namespace Hanafalah\SatuSehat\Schemas\Fhir\EncounterSatuSehat;
+namespace Hanafalah\SatuSehat\Schemas\Fhir\Encounter;
 
 use Hanafalah\SatuSehat\Contracts\Data\Fhir\Encounter\EncounterSatuSehatData;
 use Illuminate\Database\Eloquent\Builder;

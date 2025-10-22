@@ -36,6 +36,7 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
         }else{
             $satu_sehat_log = $satu_sehat_log->orderBy('created_at','desc')->where('name','OAuth2')->where('props->payload->client_id', SatuSehat::getClientId())->first();
         }
+
         if (!isset($satu_sehat_log)) {
             $this->directAuth();
             return true;
@@ -54,6 +55,7 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
             $this->directAuth();
             return true;
         }
+        $this->findOrganization($satu_sehat_log);
         return true;
     }
 
@@ -69,6 +71,22 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
         return $this;
     }
 
+    private function findOrganization($satu_sehat_log){
+        // $response = $satu_sehat_log['response'];
+        // $organization = $this->schemaContract('OrganizationSatuSehat')->prepareViewOrganizationSatuSehatList(
+        //     $this->requestDTO(config('app.contracts.OrganizationSatuSehatData'),[
+        //         'params' => [
+        //             'name' => $response['organization_name']
+        //         ]
+        //     ])
+        // );
+        // if (isset($organization) && $organization->count() > 0) {
+        //     SatuSehat::setOrganization($organization->first());
+        // }else{
+        //     throw new \Exception('Organization not found');
+        // }
+    }
+
     public function prepareStoreOauth2(OAuth2Data $o_auth2_dto): Model{
         if ($o_auth2_dto->access_validation) {
             $this->accessToSatuSehat();
@@ -82,6 +100,7 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
             ]);
             $token = $this->o_auth2_model->response['access_token'];
             $this->initializeTokenize($token);
+            $this->findOrganization($satu_sehat);
         }
         return $this->o_auth2_model;
     }

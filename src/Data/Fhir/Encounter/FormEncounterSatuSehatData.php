@@ -13,6 +13,7 @@ use Spatie\LaravelData\Attributes\Validation\BooleanType;
 use Illuminate\Support\Str;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\Validation\In;
+use Illuminate\Support\Carbon;
 
 class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSehatData
 {
@@ -26,6 +27,10 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
     #[In(['AMB','EMER','FLD','HH','IMP','ACUTE','NONAC','OBSENC','PRENC','SS','VR','referred-procedure'])]
     public string $class_code;
 
+    #[MapInputName('organization_code')]
+    #[MapName('organization_code')]
+    public string $organization_code;
+
     #[MapInputName('patient_code')]
     #[MapName('patient_code')]
     public string $patient_code;
@@ -33,6 +38,16 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
     #[MapInputName('patient_name')]
     #[MapName('patient_name')]
     public string $patient_name;
+
+    #[MapInputName('period')]
+    #[MapName('period')]
+    #[DateFormat('Y-m-d H:i:s')]
+    public ?string $period = null;
+
+    #[MapInputName('status_history')]
+    #[MapName('status_history')]
+    #[DataCollectionOf(EncounterStatusHistoryData::class)]
+    public ?array $status_history = null;
 
     #[MapInputName('participant')]
     #[MapName('participant')]
@@ -47,17 +62,24 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
         $attributes['status'] ??= 'arrived';
         
         $payload = &$attributes['payload'];
+        $payload['serviceProvider'] = [
+            'reference' => 'Organization/'.$attributes['organization_code']
+        ];
         $new->setIdentifier($attributes)
             ->setClass($attributes)
             ->setPatient($attributes)
-            ->setParticipant($attributes);
+            ->setParticipant($attributes)
+            ->setLocation($attributes)
+            ->setPeriod($attributes)
+            ->setStatusHistory($attributes)
+            ->setServiceProvider($payload);
     }
 
     private function setIdentifier(array &$attributes): self{
         $identifier = &$attributes['payload']['identifier'];
-        if (isset($attributes['org_id']) && isset($attributes['visit_code'])){
+        if (isset($attributes['organization_code']) && isset($attributes['visit_code'])){
             $identifier[] = [
-                'system' => 'http://sys-ids.kemkes.go.id/encounter/'.$attributes['org_id'],
+                'system' => 'http://sys-ids.kemkes.go.id/encounter/'.$attributes['organization_code'],
                 'value' => $attributes['visit_code']
             ];
         }else{
@@ -100,21 +122,76 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
 
     private function setParticipant(array &$attributes): self{
         $participants = &$attributes['payload']['participant'];
+        $temp_participants = [];
         foreach ($attributes['participant'] as $key => $participant) {
+            $coding = ['system' => 'http://terminology.hl7.org/CodeSystem/v3-ParticipationType'];
             switch ($key) {
-                case 'admitters'            : [];
-                case 'attenders'            : [];
-                case 'callback_contacts'    : [];
-                case 'consultants'          : [];
-                case 'dischargers'          : [];
-                case 'escorts'              : [];
-                case 'referrers'            : [];
-                case 'secondary_performers' : [];
-                case 'primary_performers'   : [];
-                case 'participations'       : [];
-                case 'translators'          : [];
-                case 'emergencies'          : [];
+                case 'admitters'            : array_merge($coding,['code' => 'ADM','display' => 'admitter']);break;
+                case 'attenders'            : array_merge($coding,['code' => 'ATND','display' => 'attender']);break;
+                case 'callback_contacts'    : array_merge($coding,['code' => 'CALLBCK','display' => 'callback contact']);break;
+                case 'consultants'          : array_merge($coding,['code' => 'CON','display' => 'consultant']);break;
+                case 'dischargers'          : array_merge($coding,['code' => 'DIS','display' => 'discharger']);break;
+                case 'escorts'              : array_merge($coding,['code' => 'ESC','display' => 'escort']);break;
+                case 'referrers'            : array_merge($coding,['code' => 'REF','display' => 'referrer']);break;
+                case 'secondary_performers' : array_merge($coding,['code' => 'SPRF','display' => 'secondary performer']);break;
+                case 'primary_performers'   : array_merge($coding,['code' => 'PPRF','display' => 'primary performer']);break;
+                case 'participations'       : array_merge($coding,['code' => 'PART','display' => 'Participation']);break;
+                case 'translators'          : array_merge($coding,['code' => 'translator','display' => 'Translator','system' => 'http://terminology.hl7.org/CodeSystem/participant-type']);break;
+                case 'emergencies'          : array_merge($coding,['code' => 'emergency','display' => 'Emergency', 'system' => 'http://terminology.hl7.org/CodeSystem/participant-type']);break;
             }
+            if (isset($temp_participants[$participant['participant_code']])){
+                $temp_participant = &$temp_participants[$participant['participant_code']];
+            }else{
+                $temp_participants[$participant['participant_code']] = [
+                    'type' => [
+                        [
+                            'coding' => []
+                        ]
+                    ],
+                    'individual' => [
+                        'reference' => 'Practitioner/'.$participant['participant_code'],
+                        'display' => $participant['participant_name']
+                    ]
+                ];
+                $temp_participant = &$temp_participants[$participant['participant_code']];
+            }
+            $temp_participant['type'][0][] = $coding;
+        }
+        $participants = array_values($temp_participants);
+        return $this;
+    }
+
+    private function setLocation(array &$attributes): self{
+        $location = &$attributes['payload']['location'];
+        $location[] = [
+            'localtion' => [
+                'reference' => 'Location/'.$attributes['location_code'],
+                'display' => $attributes['location_name']
+            ]
+        ];
+        return $this;
+    }
+
+    private function setPeriod(array &$attributes): self{
+        $period = &$attributes['payload']['period'];
+        if (isset($attributes['period'])){
+            $period = [
+                'start' => Carbon::createFromFormat('Y-m-d H:i:s', $attributes['period']['start'])->toIso8601String(),
+            ];
+
+        }
+        return $this;
+    }
+
+    private function setStatusHistory(array &$attributes): self{
+        $status_history = &$attributes['payload']['statusHistory'];
+        foreach ($attributes['status_history'] as $key => $status_history_value) {
+            $status_history[] = [
+                'status' => Str::kebab($key),
+                'period' => [
+                    'start' => Carbon::createFromFormat('Y-m-d H:i:s', $status_history_value)->toIso8601String(),
+                ]
+            ];
         }
         return $this;
     }

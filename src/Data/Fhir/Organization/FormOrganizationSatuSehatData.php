@@ -15,44 +15,9 @@ use Spatie\LaravelData\Attributes\Validation\In;
 
 class FormOrganizationSatuSehatData extends Data implements DataFormOrganizationSatuSehatData
 {
-    #[MapInputName('ihs_number')]
-    #[MapName('ihs_number')]
-    public ?string $ihs_number = null;
-
-    #[MapInputName('name')]
-    #[MapName('name')]
-    public string $name;
-
-    #[MapInputName('gender')]
-    #[MapName('gender')]
-    #[In('male', 'female')]
-    public ?string $gender = null;
-
-    #[MapInputName('nik')]
-    #[MapName('nik')]
-    public ?string $nik = null;
-
-    #[MapInputName('nik_ibu')]
-    #[MapName('nik_ibu')]
-    public ?string $nik_ibu = null;
-
     #[MapInputName('active')]
     #[MapName('active')]
     public ?bool $active = true;
-
-    #[MapInputName('birth_date')]
-    #[MapName('birth_date')]
-    #[DateFormat('Y-m-d')]
-    public ?string $birth_date = null;
-
-    #[MapInputName('deceased_boolean')]
-    #[MapName('deceased_boolean')]
-    #[BooleanType]
-    public ?bool $deceased_boolean = false;
-
-    // #[MapInputName('payload')]
-    // #[MapName('payload')]
-    // public ?OrganizationPayloadData $payload = null;
 
     #[MapInputName('address')]
     #[MapName('address')]
@@ -62,9 +27,6 @@ class FormOrganizationSatuSehatData extends Data implements DataFormOrganization
         $new = static::new();        
         $payload = &$attributes['payload'];
         $attributes['active'] ??= true;
-        $attributes['deceased_boolean'] ??= true;
-        $attrs = ['active','gender','birth_date','deceased_boolean','multiple_birth_integer'];
-        foreach ($attrs as $attr) $payload[Str::camel($attr)] = $attributes[$attr] ?? null;
 
         $new->setIdentifier($attributes)
             ->setName($attributes)
