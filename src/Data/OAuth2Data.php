@@ -17,6 +17,10 @@ class OAuth2Data extends SatuSehatLogData implements DataOAuth2Data
     #[MapName('client_secret')]
     public ?string $client_secret = null;
 
+    #[MapInputName('organization_id')]
+    #[MapName('organization_id')]
+    public ?string $organization_id = null;
+
     #[MapInputName('access_validation')]
     #[MapName('access_validation')]
     public ?bool $access_validation = true;
@@ -31,5 +35,6 @@ class OAuth2Data extends SatuSehatLogData implements DataOAuth2Data
         $attributes['grant_type']   ??= 'client_credentials';
         $attributes['client_id']     = SatuSehat::getClientId();
         $attributes['client_secret'] = SatuSehat::getClientSecret();
+        $attributes['organization_id'] = SatuSehat::getOrganizationId();
     }
 }

@@ -10,7 +10,8 @@ trait HasEnvironment{
     protected $__current_satu_sehat_host;
     protected $__credentials = [
         'client_id' => null,
-        'client_secret' => null
+        'client_secret' => null,
+        'organization_id' => null
     ];
 
     public function setEnvironment(?string $env_type = null){
@@ -67,12 +68,15 @@ trait HasEnvironment{
     public function setCredentialsDefault(): self{
         $config_credentials = config('environment.credentials',[
             'client_id' => null,
-            'client_secret' => null
+            'client_secret' => null,
+            'organization_id' => null
         ]);
         $client_id = $config_credentials['client_id'] ?? env('SS_CLIENT_ID');
         $client_secret = $config_credentials['client_secret'] ?? env('SS_CLIENT_SECRET');
+        $org_id = $config_credentials['organization_id'] ?? env('SS_ORGANIZATION_ID');
         $this->setCredential('client_id', $client_id)
-            ->setCredential('client_secret', $client_secret);
+             ->setCredential('client_secret', $client_secret)
+             ->setCredential('organization_id', $org_id);
         return $this;
     }
 
@@ -88,6 +92,10 @@ trait HasEnvironment{
 
     public function getClientSecret(): ?string{
         return $this->getCredentials('client_secret');
+    }
+
+    public function getOrganizationId(): ?string{
+        return $this->getCredentials('organization_id');
     }
 
     public function getCredentials(?string $credential_type = null): array|string|null{
