@@ -25,16 +25,6 @@ class OrganizationSatuSehat extends OAuth2 implements ContractsOrganizationSatuS
         ]
     ];
 
-    // public function __construct(){
-    //     parent::__construct();
-        // $this->setOrganizationExample();
-    // }
-
-    // private function setOrganizationExample(): self{
-    //     $this->__organization_examples = include __DIR__.'/data/organization-example-data.php';
-    //     return $this;
-    // }
-
     public function prepareStoreOrganizationSatuSehat(OrganizationSatuSehatData $organization_satu_sehat_dto): Model{
         $organization = SatuSehat::store('Organization',$organization_satu_sehat_dto->form->payload->toArray());
         $this->organization_satu_sehat_model = $this->logSatuSehat(SatuSehat::getResponse(),$organization,SatuSehat::getPayload());

@@ -5,13 +5,10 @@ namespace Hanafalah\SatuSehat\Data\Fhir\Organization;
 use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\SatuSehat\Contracts\Data\Fhir\MultipleAddressSatuSehatData;
 use Hanafalah\SatuSehat\Contracts\Data\Fhir\Organization\FormOrganizationSatuSehatData as DataFormOrganizationSatuSehatData;
-use Hanafalah\SatuSehat\Contracts\Data\Fhir\Organization\Form\OrganizationPayloadData;
+use Hanafalah\SatuSehat\Contracts\Data\Fhir\Organization\OrganizationTypeSatuSehatData;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
-use Spatie\LaravelData\Attributes\Validation\DateFormat;
-use Spatie\LaravelData\Attributes\Validation\BooleanType;
 use Illuminate\Support\Str;
-use Spatie\LaravelData\Attributes\Validation\In;
 
 class FormOrganizationSatuSehatData extends Data implements DataFormOrganizationSatuSehatData
 {
@@ -19,18 +16,39 @@ class FormOrganizationSatuSehatData extends Data implements DataFormOrganization
     #[MapName('active')]
     public ?bool $active = true;
 
+    #[MapInputName('organization_code')]
+    #[MapName('organization_code')]
+    public ?string $organization_code = null;
+
+    #[MapInputName('organization_name')]
+    #[MapName('organization_name')]
+    public ?string $organization_name = null;
+
+    #[MapInputName('type')]
+    #[MapName('type')]
+    public ?OrganizationTypeSatuSehatData $type = null;
+
     #[MapInputName('address')]
     #[MapName('address')]
     public ?MultipleAddressSatuSehatData $address = null;
 
+    #[MapInputName('telecom')]
+    #[MapName('telecom')]
+    public ?OrganizationTelcomSatuSehatData $telecom = null;
+
     public static function before(array &$attributes){
         $new = static::new();        
         $payload = &$attributes['payload'];
+        $payload['partOf'] = [
+            "reference" => "Organization/".$attributes['organization_code']
+        ];
         $attributes['active'] ??= true;
 
         $new->setIdentifier($attributes)
             ->setName($attributes)
-            ->setAddress($attributes);
+            ->setAddress($attributes)
+            ->setType($attributes)
+            ->setTelecom($attributes);
     }
 
     private function setName(array &$attributes): self{
@@ -43,27 +61,47 @@ class FormOrganizationSatuSehatData extends Data implements DataFormOrganization
 
     private function setIdentifier(array &$attributes): self{
         $identifier = &$attributes['payload']['identifier'];
-        if (isset($attributes['nik_ibu'])){
+        if (isset($attributes['organization_code']) && isset($attributes['organization_name'])){
             $identifier[] = [
-                'system' => 'https://fhir.kemkes.go.id/id/nik-ibu',
-                'value' => $attributes['nik_ibu']
+                'use' => 'official',
+                'system' => 'http://sys-ids.kemkes.go.id/organization/'.$attributes['organization_code'],
+                'value' => $attributes['organization_name']
             ];
+        }else{
+            throw new \Exception('organization_code or organization_name not found');
         }
+        return $this;
+    }
 
-        if (isset($attributes['nik'])){
-            $identifier[] = [
-                'system' => 'https://fhir.kemkes.go.id/id/nik',
-                'value' => $attributes['nik']
-            ];
+    private function setType(array &$attributes): self{
+        $type = &$attributes['payload']['type'];
+        if (isset($attributes['type'])){
+            $type = [["coding" => []]];
+            $coding = &$type[0]['coding'];
+            foreach ($attributes['type'] as $key => $attr_type) {
+                switch ($key) {
+                    case 'provider'          : $key = 'prov';break;
+                    case 'department'        : $key = 'dept';break;
+                    case 'team'              : $key = 'team';break;
+                    case 'government'        : $key = 'govt';break;
+                    case 'insurence'         : $key = 'ins';break;
+                    case 'payer'             : $key = 'pay';break;
+                    case 'educational'       : $key = 'edu';break;
+                    case 'religious'         : $key = 'reli';break;
+                    case 'clinical_research' : $key = 'crs';break;
+                    case 'community'         : $key = 'cg';break;
+                    case 'bussiness'         : $key = 'bus';break;
+                    case 'other'             : $key = 'other';break;
+                }
+                $coding[] = [
+                    'system' => "http://terminology.hl7.org/CodeSystem/organization-type",
+                    'code' => $key,
+                    'display' => $attr_type
+                ];                
+            }
+        }else{
+            throw new \Exception('type not found');
         }
-
-        if (isset($attributes['ihs_number'])){
-            $identifier[] = [
-                'system' => 'https://fhir.kemkes.go.id/id/ihs-number',
-                'value' => $attributes['ihs_number']
-            ];
-        }
-
         return $this;
     }
 
@@ -102,6 +140,26 @@ class FormOrganizationSatuSehatData extends Data implements DataFormOrganization
                 $new_addresses[] = $new_address;
             }
             $address = $new_addresses;
+        }
+        return $this;
+    }
+
+    private function setTelecom(array &$attributes): self{
+        $payload_telecom = &$attributes['payload']['telecom'];
+        if (isset($attributes['telecom'])){
+            foreach ($attributes['telecom'] as $key => $telecom_data) {
+                foreach ($telecom_data as $telecom_type => $telecom_values) {
+                    foreach ($telecom_values as $value) {
+                        $payload_telecom[] = [
+                            'system' => $telecom_type,
+                            'value'  => $value,
+                            'use'    => $key
+                        ];
+                    }
+                }
+            }
+        }else{
+            throw new \Exception('telecom not found');
         }
         return $this;
     }

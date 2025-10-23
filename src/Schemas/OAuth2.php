@@ -2,6 +2,7 @@
 
 namespace Hanafalah\SatuSehat\Schemas;
 
+use Hanafalah\LaravelSupport\Contracts\Data\PaginateData;
 use Hanafalah\SatuSehat\Contracts\Schemas\OAuth2 as ContractsOAuth2;
 use Hanafalah\SatuSehat\Contracts\Data\OAuth2Data;
 use Hanafalah\SatuSehat\Facades\SatuSehat;
@@ -25,7 +26,12 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
 
     public function __construct(){
         parent::__construct();
-        if ($this->__entity !== 'OAuth2') $this->accessToSatuSehat();
+        // if ($this->__entity !== 'OAuth2') {
+        //     try {
+        //         $this->accessToSatuSehat();
+        //     } catch (\Throwable $th) {
+        //     }
+        // }
     }
 
     public function accessToSatuSehat(? string $token = null): bool{
@@ -55,7 +61,7 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
             $this->directAuth();
             return true;
         }
-        $this->findOrganization($satu_sehat_log);
+        // $this->findOrganization($satu_sehat_log);
         return true;
     }
 
@@ -100,9 +106,33 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
             ]);
             $token = $this->o_auth2_model->response['access_token'];
             $this->initializeTokenize($token);
-            $this->findOrganization($satu_sehat);
+            // $this->findOrganization($satu_sehat);
         }
         return $this->o_auth2_model;
+    }
+
+    protected function isOauth2Model(): bool{
+        return $this->usingEntity() == 'OAuth2';
+    }
+
+    public function generalFind(? callable $callback = null): ?array{
+        $this->accessToSatuSehat();
+        return parent::generalFind($callback);
+    }
+
+    public function generalViewList(): array{
+        $this->accessToSatuSehat();
+        return parent::generalViewList();
+    }
+
+    public function generalStore(mixed $dto = null): array{
+        if (!$this->isOauth2Model()) $this->accessToSatuSehat();
+        return parent::generalStore($dto);
+    }
+
+    public function generalViewPaginate(?PaginateData $paginate_dto = null): array{
+        $this->accessToSatuSehat();
+        return parent::generalViewPaginate($paginate_dto);
     }
 
     public function oauth2(mixed $conditionals = null): Builder{

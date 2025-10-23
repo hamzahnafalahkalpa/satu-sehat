@@ -7,6 +7,7 @@ trait HasEnvironment{
     protected $__satu_sehat_env;
     protected $__current_auth_host;
     protected $__current_fhir_host;
+    protected $__current_satu_sehat_host;
     protected $__credentials = [
         'client_id' => null,
         'client_secret' => null
@@ -19,6 +20,7 @@ trait HasEnvironment{
         $this->__satu_sehat_env = config('satu-sehat.environment',[]);
         $this->__current_auth_host = $this->getHost('AUTH', $env_type);
         $this->__current_fhir_host = $this->getHost('FHIR', $env_type);
+        $this->__current_satu_sehat_host = $this->getHost('SATUSEHAT', $env_type);
 
         $this->setEnvConfig('env_type', $env_type)
              ->setEnvConfig('hosts', $this->__hosts)
@@ -34,6 +36,10 @@ trait HasEnvironment{
         return $this->__current_fhir_host;
     }
 
+    public function getCurrentSatuSehatHost():string{
+        return $this->__current_satu_sehat_host;
+    }
+
     private function setCurrentAuthHost(string $host): self{
         $this->__current_auth_host = $host;
         return $this;
@@ -41,6 +47,11 @@ trait HasEnvironment{
 
     private function setCurrentFhirHost(string $host): self{
         $this->__current_fhir_host = $host;
+        return $this;
+    }
+
+    private function setCurrentSatuSehatHost(string $host): self{
+        $this->__current_satu_sehat_host = $host;
         return $this;
     }
 

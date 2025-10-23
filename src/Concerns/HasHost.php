@@ -13,11 +13,16 @@ trait HasHost{
             'DEV' => 'https://api-satusehat-dev.dto.kemkes.go.id/fhir-r4/v1',
             'STG' => 'https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1',
             'PROD' => 'https://api-satusehat.kemkes.go.id/fhir-r4/v1'
+        ],
+        'SATUSEHAT' => [
+            'DEV' => 'https://api-satusehat-dev.dto.kemkes.go.id',
+            'STG' => 'https://api-satusehat-stg.dto.kemkes.go.id',
+            'PROD' => 'https://api-satusehat.kemkes.go.id'
         ]
     ];
 
     public function setDefaultHosts(): self{
-        $host_types = ['AUTH','FHIR'];
+        $host_types = ['AUTH','FHIR','SATUSEHAT'];
         $env_types = ['DEV','STG','PROD'];
         foreach ($host_types as $host_type) {
             foreach ($env_types as $env_type) {
