@@ -10,19 +10,8 @@ use Spatie\LaravelData\Attributes\Validation\In;
 
 class LocationFormIdentifierData extends Data implements DataLocationFormIdentifierData
 {
-    #[MapInputName('use')]
-    #[MapName('use')]
-    #[In('usual','official','temp','secondary','old')]
-    public ?string $use = 'official';
-
     #[MapInputName('system')]
     #[MapName('system')]
-    #[In(
-        'https://fhir.kemkes.go.id/id/nik',
-        'https://fhir.kemkes.go.id/id/ihs-number',
-        'https://fhir.kemkes.go.id/id/kk',
-        'https://fhir.kemkes.go.id/id/paspor'
-    )]
     public ?string $system = null;
 
     #[MapInputName('value')]
@@ -30,7 +19,6 @@ class LocationFormIdentifierData extends Data implements DataLocationFormIdentif
     public ?string $value = null;
 
     public static function before(array &$attributes){
-        $attributes['use'] ??= 'official';
-        $attributes['system'] ??= 'https://fhir.kemkes.go.id/id/nik';
+        $attributes['system'] ??= 'http://sys-ids.kemkes.go.id/location/';
     }
 }

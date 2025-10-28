@@ -4,6 +4,7 @@ namespace Hanafalah\SatuSehat\Data\Fhir\Organization;
 
 use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\SatuSehat\Contracts\Data\Fhir\MultipleAddressSatuSehatData;
+use Hanafalah\SatuSehat\Contracts\Data\Fhir\Organization\Form\OrganizationPayloadData;
 use Hanafalah\SatuSehat\Contracts\Data\Fhir\Organization\FormOrganizationSatuSehatData as DataFormOrganizationSatuSehatData;
 use Hanafalah\SatuSehat\Contracts\Data\Fhir\Organization\OrganizationTypeSatuSehatData;
 use Spatie\LaravelData\Attributes\MapInputName;
@@ -15,6 +16,10 @@ class FormOrganizationSatuSehatData extends Data implements DataFormOrganization
     #[MapInputName('active')]
     #[MapName('active')]
     public ?bool $active = true;
+
+    #[MapInputName('part_of_organization_code')]
+    #[MapName('part_of_organization_code')]
+    public ?string $part_of_organization_code = null;
 
     #[MapInputName('organization_code')]
     #[MapName('organization_code')]
@@ -36,11 +41,16 @@ class FormOrganizationSatuSehatData extends Data implements DataFormOrganization
     #[MapName('telecom')]
     public ?OrganizationTelcomSatuSehatData $telecom = null;
 
+    #[MapInputName('payload')]
+    #[MapName('payload')]
+    public ?OrganizationPayloadData $payload = null;
+
     public static function before(array &$attributes){
         $new = static::new();        
         $payload = &$attributes['payload'];
+        $attributes['part_of_organization_code'] ??= $attributes['organization_code'];
         $payload['partOf'] = [
-            "reference" => "Organization/".$attributes['organization_code']
+            "reference" => "Organization/".$attributes['part_of_organization_code']
         ];
         $attributes['active'] ??= true;
 
@@ -53,9 +63,11 @@ class FormOrganizationSatuSehatData extends Data implements DataFormOrganization
 
     private function setName(array &$attributes): self{
         $name = &$attributes['payload']['name'];
-        $name[] = [
-            'text' => $attributes['name'],
-        ];
+        if (isset($attributes['organization_name'])){
+            $name = $attributes['organization_name'];
+        }else{
+            throw new \Exception('organization_name not found');
+        }
         return $this;
     }
 

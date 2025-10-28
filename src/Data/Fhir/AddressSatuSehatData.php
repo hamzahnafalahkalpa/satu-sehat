@@ -6,9 +6,15 @@ use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\SatuSehat\Contracts\Data\Fhir\AddressSatuSehatData as FhirAddressSatuSehatData;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
+use Spatie\LaravelData\Attributes\Validation\In;
 
 class AddressSatuSehatData extends Data implements FhirAddressSatuSehatData
 {
+    #[MapInputName('use')]
+    #[MapName('use')]
+    #[In('home','work','temp','old','billing')]
+    public ?string $use = null;
+
     #[MapInputName('name')]
     #[MapName('name')]
     public ?string $name = null;

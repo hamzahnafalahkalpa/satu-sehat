@@ -16,7 +16,6 @@ class EncounterSatuSehat extends OAuth2 implements ContractsEncounterSatuSehat
 {
     protected string $__entity = 'EncounterSatuSehat';
     public $encounter_model;
-    protected array $__patient_examples;
     //protected mixed $__order_by_created_at = false; //asc, desc, false
 
     protected array $__cache = [
@@ -28,8 +27,8 @@ class EncounterSatuSehat extends OAuth2 implements ContractsEncounterSatuSehat
     ];
 
     public function prepareStoreEncounterSatuSehat(EncounterSatuSehatData $encounter_dto): Model{
-        $patient = SatuSehat::store('Encounter',$encounter_dto->form->payload->toArray());
-        $this->encounter_model = $this->logSatuSehat(SatuSehat::getResponse(),$patient,SatuSehat::getPayload());
+        $encounter = SatuSehat::store('Encounter',$encounter_dto->form->payload->toArray());
+        $this->encounter_model = $this->logSatuSehat(SatuSehat::getResponse(),$encounter,SatuSehat::getPayload());
         return $this->encounter_model;
     }
 

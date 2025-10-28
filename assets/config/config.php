@@ -7,10 +7,13 @@ use Hanafalah\SatuSehat\{
 };
 
 return [
-    "env_type" => env('SS_ENV_TYPE','STG'),
-    "environment"=> [],
-    "credentials"=> [],
-    "namespace"     => "Hanafalah\SatuSehat",
+    'env_type' => env('SS_ENV_TYPE','STG'),
+    'environment'=> [],
+    'credentials'=> [],
+    'namespace'     => 'Hanafalah\SatuSehat',
+    'client_id' => env('SS_CLIENT_ID'),
+    'client_secret' => env('SS_CLIENT_SECRET'),
+    'organization_id' => env('SS_ORGANIZATION_ID'),
     'app' => [
         'contracts' => [
         ],
@@ -46,5 +49,5 @@ return [
         'models' => [
         ]
     ],
-    "provider" => "Hanafalah\SatuSehat\\Providers\\SatuSehatServiceProvider"
+    'provider' => 'Hanafalah\SatuSehat\\Providers\\SatuSehatServiceProvider'
 ];

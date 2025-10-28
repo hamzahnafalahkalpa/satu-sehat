@@ -4,8 +4,6 @@ namespace Hanafalah\SatuSehat\Data\Fhir\Location\Form;
 
 use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\SatuSehat\Contracts\Data\Fhir\Location\Form\LocationFormAddressData as DataLocationFormAddressData;
-use Hanafalah\SatuSehat\Data\Fhir\Location\Form\Address\LocationFormAddressExtensionData;
-use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 use Spatie\LaravelData\Attributes\Validation\In;

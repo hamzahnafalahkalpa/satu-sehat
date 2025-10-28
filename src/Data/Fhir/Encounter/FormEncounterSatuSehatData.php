@@ -31,6 +31,10 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
     #[MapName('organization_code')]
     public string $organization_code;
 
+    #[MapInputName('visit_code')]
+    #[MapName('visit_code')]
+    public string $visit_code;
+
     #[MapInputName('patient_code')]
     #[MapName('patient_code')]
     public string $patient_code;
@@ -46,8 +50,7 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
 
     #[MapInputName('status_history')]
     #[MapName('status_history')]
-    #[DataCollectionOf(EncounterStatusHistoryData::class)]
-    public ?array $status_history = null;
+    public ?EncounterStatusHistoryData $status_history = null;
 
     #[MapInputName('participant')]
     #[MapName('participant')]
@@ -56,6 +59,14 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
     #[MapInputName('payload')]
     #[MapName('payload')]
     public ?EncounterPayloadData $payload = null;
+
+    #[MapInputName('location_code')]
+    #[MapName('location_code')]
+    public string $location_code;
+
+    #[MapInputName('location_name')]
+    #[MapName('location_name')]
+    public string $location_name;
 
     public static function before(array &$attributes){
         $new = static::new();       
@@ -67,12 +78,18 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
         ];
         $new->setIdentifier($attributes)
             ->setClass($attributes)
-            ->setPatient($attributes)
+            ->setSubject($attributes)
             ->setParticipant($attributes)
             ->setLocation($attributes)
             ->setPeriod($attributes)
             ->setStatusHistory($attributes)
-            ->setServiceProvider($payload);
+            ->setServiceProvider($attributes);
+    }
+
+    private function setServiceProvider(array &$attributes): self{
+        $service_provider = &$attributes['payload']['serviceProvider'];
+        $service_provider['reference'] = 'Organization/'.$attributes['organization_code'];
+        return $this;
     }
 
     private function setIdentifier(array &$attributes): self{
@@ -92,7 +109,7 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
     private function setClass(array &$attributes): self{
         $class = &$attributes['payload']['class'];
         $class['system'] ??= 'http://terminology.hl7.org/CodeSystem/v3-ActCode';
-        switch ($attributes['class_cpde']) {
+        switch ($attributes['class_code']) {
             case 'AMB'    : $class['code'] = $attributes['class_code'];$class['display'] = 'ambulatory';break;
             case 'EMER'   : $class['code'] = $attributes['class_code'];$class['display'] = 'emergency';break;
             case 'FLD'    : $class['code'] = $attributes['class_code'];$class['display'] = 'field';break;
@@ -113,17 +130,17 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
         return $this;
     }
 
-    private function setPatient(array &$attributes): self{
-        $patient = &$attributes['payload']['patient'];
-        $patient['reference'] = 'Patient/'.$attributes['patient_code'];
-        $patient['display'] = $attributes['patient_name'];
+    private function setSubject(array &$attributes): self{
+        $subject = &$attributes['payload']['subject'];
+        $subject['reference'] = 'Patient/'.$attributes['patient_code'];
+        $subject['display'] = $attributes['patient_name'];
         return $this;
     }
 
     private function setParticipant(array &$attributes): self{
         $participants = &$attributes['payload']['participant'];
         $temp_participants = [];
-        foreach ($attributes['participant'] as $key => $participant) {
+        foreach ($attributes['participant'] as $key => $participant_attrs) {
             $coding = ['system' => 'http://terminology.hl7.org/CodeSystem/v3-ParticipationType'];
             switch ($key) {
                 case 'admitters'            : array_merge($coding,['code' => 'ADM','display' => 'admitter']);break;
@@ -139,23 +156,25 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
                 case 'translators'          : array_merge($coding,['code' => 'translator','display' => 'Translator','system' => 'http://terminology.hl7.org/CodeSystem/participant-type']);break;
                 case 'emergencies'          : array_merge($coding,['code' => 'emergency','display' => 'Emergency', 'system' => 'http://terminology.hl7.org/CodeSystem/participant-type']);break;
             }
-            if (isset($temp_participants[$participant['participant_code']])){
-                $temp_participant = &$temp_participants[$participant['participant_code']];
-            }else{
-                $temp_participants[$participant['participant_code']] = [
-                    'type' => [
-                        [
-                            'coding' => []
+            foreach ($participant_attrs as $participant) {
+                if (isset($temp_participants[$participant['participant_code']])){
+                    $temp_participant = &$temp_participants[$participant['participant_code']];
+                }else{
+                    $temp_participants[$participant['participant_code']] = [
+                        'type' => [
+                            [
+                                'coding' => []
+                            ]
+                        ],
+                        'individual' => [
+                            'reference' => 'Practitioner/'.$participant['participant_code'],
+                            'display' => $participant['participant_name']
                         ]
-                    ],
-                    'individual' => [
-                        'reference' => 'Practitioner/'.$participant['participant_code'],
-                        'display' => $participant['participant_name']
-                    ]
-                ];
-                $temp_participant = &$temp_participants[$participant['participant_code']];
+                    ];
+                    $temp_participant = &$temp_participants[$participant['participant_code']];
+                }
+                $temp_participant['type'][0]['coding'][] = $coding;
             }
-            $temp_participant['type'][0][] = $coding;
         }
         $participants = array_values($temp_participants);
         return $this;
@@ -164,7 +183,7 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
     private function setLocation(array &$attributes): self{
         $location = &$attributes['payload']['location'];
         $location[] = [
-            'localtion' => [
+            'location' => [
                 'reference' => 'Location/'.$attributes['location_code'],
                 'display' => $attributes['location_name']
             ]
@@ -176,7 +195,7 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
         $period = &$attributes['payload']['period'];
         if (isset($attributes['period'])){
             $period = [
-                'start' => Carbon::createFromFormat('Y-m-d H:i:s', $attributes['period']['start'])->toIso8601String(),
+                'start' => Carbon::createFromFormat('Y-m-d H:i:s', $attributes['period'])->toIso8601String(),
             ];
 
         }
@@ -186,6 +205,7 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
     private function setStatusHistory(array &$attributes): self{
         $status_history = &$attributes['payload']['statusHistory'];
         foreach ($attributes['status_history'] as $key => $status_history_value) {
+            if (!isset($status_history_value)) continue;
             $status_history[] = [
                 'status' => Str::kebab($key),
                 'period' => [

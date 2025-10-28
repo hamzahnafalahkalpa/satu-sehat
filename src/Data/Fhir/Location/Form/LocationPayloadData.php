@@ -8,6 +8,7 @@ use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 use Spatie\LaravelData\Attributes\Validation\DateFormat;
+use Spatie\LaravelData\Attributes\Validation\In;
 
 class LocationPayloadData extends Data implements DataLocationPayloadData
 {
@@ -15,55 +16,51 @@ class LocationPayloadData extends Data implements DataLocationPayloadData
     #[MapName('resourceType')]
     public ?string $resourceType = 'Location';
 
-    #[MapInputName('meta')]
-    #[MapName('meta')]
-    public ?array $meta = [];
-
     #[MapInputName('identifier')]
     #[MapName('identifier')]
     #[DataCollectionOf(LocationFormIdentifierData::class)]
     public ?array $identifier = null;
 
+    #[MapInputName('status')]
+    #[MapName('status')]
+    public ?string $status = 'active';
+
     #[MapInputName('name')]
     #[MapName('name')]
-    #[DataCollectionOf(LocationFormNameData::class)]
-    public ?array $name = null;
+    public string $name;
 
-    #[MapInputName('active')]
-    #[MapName('active')]
-    public ?bool $active = true;
+    #[MapInputName('description')]
+    #[MapName('description')]
+    public ?string $description = null;
 
-    #[MapInputName('gender')]
-    #[MapName('gender')]
-    public ?string $gender;
-
-    #[MapInputName('birthDate')]
-    #[MapName('birthDate')]
-    #[DateFormat('Y-m-d')]
-    public ?string $birthDate;
+    #[MapInputName('mode')]
+    #[MapName('mode')]
+    #[In('instance','kind')]
+    public ?string $mode = null;
 
     #[MapInputName('address')]
     #[MapName('address')]
-    #[DataCollectionOf(LocationFormAddressData::class)]
-    public ?array $address = [];
+    public ?LocationFormAddressData $address = null;
 
-    #[MapInputName('deceasedBoolean')]
-    #[MapName('deceasedBoolean')]
-    public ?bool $deceasedBoolean = false;
+    #[MapInputName('telecom')]
+    #[MapName('telecom')]
+    public ?array $telecom;
 
-    #[MapInputName('multipleBirthInteger')]
-    #[MapName('multipleBirthInteger')]
-    public ?int $multipleBirthInteger = 0;
+    #[MapInputName('physicalType')]
+    #[MapName('physicalType')]
+    public ?array $physicalType = null;
+
+    #[MapInputName('position')]
+    #[MapName('position')]
+    public ?array $position = null;
+
+    #[MapInputName('managingOrganization')]
+    #[MapName('managingOrganization')]
+    public array $managingOrganization;
 
     public static function before(array &$attributes){
         $attributes['resourceType'] ??= 'Location';
-        $attributes['deceasedBoolean'] ??= false;
-        $attributes['multipleBirthInteger'] ??= 0;
-        $attributes['active'] ??= true;
-        $attributes['meta'] = [
-            "profile" => [
-                "https://fhir.kemkes.go.id/r4/StructureDefinition/Location"
-            ]
-        ];
+        $attributes['status'] ??= 'active';
+        $attributes['mode'] ??= 'instance';
     }
 }

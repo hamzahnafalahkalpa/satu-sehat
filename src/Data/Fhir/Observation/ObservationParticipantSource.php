@@ -1,16 +1,16 @@
 <?php
 
-namespace Hanafalah\SatuSehat\Data\Fhir\Encounter;
+namespace Hanafalah\SatuSehat\Data\Fhir\Observation;
 
 use Hanafalah\LaravelSupport\Supports\Data;
-use Hanafalah\SatuSehat\Contracts\Data\Fhir\Encounter\{
-    EncounterParticipantSource as DataEncounterParticipantSource,
+use Hanafalah\SatuSehat\Contracts\Data\Fhir\Observation\{
+    ObservationParticipantSource as DataObservationParticipantSource,
 };
 
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 
-class EncounterParticipantSource extends Data implements DataEncounterParticipantSource
+class ObservationParticipantSource extends Data implements DataObservationParticipantSource
 {
     #[MapName('participant_code')]
     #[MapInputName('participant_code')]

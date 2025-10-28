@@ -33,7 +33,7 @@ class OrganizationPayloadData extends Data implements DataOrganizationPayloadDat
 
     #[MapInputName('telecom')]
     #[MapName('telecom')]
-    public ?string $telecom;
+    public ?array $telecom;
 
     #[MapInputName('address')]
     #[MapName('address')]

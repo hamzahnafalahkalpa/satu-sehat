@@ -15,35 +15,35 @@ class EncounterStatusHistoryData extends Data implements DataEncounterStatusHist
     #[MapInputName('planned')]
     #[MapName('planned')]
     #[DateFormat('Y-m-d H:i:s')]
-    public ?array $planned = null;
+    public ?string $planned = null;
 
     #[MapInputName('arrived')]
     #[MapName('arrived')]
     #[DateFormat('Y-m-d H:i:s')]
-    public ?array $arrived = null;
+    public ?string $arrived = null;
 
     #[MapInputName('triaged')]
     #[MapName('triaged')]
     #[DateFormat('Y-m-d H:i:s')]
-    public ?array $triaged = null;
+    public ?string $triaged = null;
 
     #[MapInputName('in-progress')]
     #[MapName('in-progress')]
     #[DateFormat('Y-m-d H:i:s')]
-    public ?array $in_progress = null;
+    public ?string $in_progress = null;
 
     #[MapInputName('on_leave')]
     #[MapName('on_leave')]
     #[DateFormat('Y-m-d H:i:s')]
-    public ?array $on_leave = null;
+    public ?string $on_leave = null;
 
     #[MapInputName('finished')]
     #[MapName('finished')]
     #[DateFormat('Y-m-d H:i:s')]
-    public ?array $finished = null;
+    public ?string $finished = null;
 
     #[MapInputName('cancelled')]
     #[MapName('cancelled')]
     #[DateFormat('Y-m-d H:i:s')]
-    public ?array $cancelled = null;
+    public ?string $cancelled = null;
 }

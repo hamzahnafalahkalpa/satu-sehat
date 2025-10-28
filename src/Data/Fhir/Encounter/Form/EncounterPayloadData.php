@@ -59,12 +59,5 @@ class EncounterPayloadData extends Data implements DataEncounterPayloadData
         $attributes['period'] ??= [
             'start' => now()->toIso8601String(),
         ];
-        $class = &$attributes['class'];
-        $class['system'] ??= 'http://terminology.hl7.org/CodeSystem/v3-ActCode';
-        $attributes['meta'] = [
-            "profile" => [
-                "https://fhir.kemkes.go.id/r4/StructureDefinition/Encounter"
-            ]
-        ];
     }
 }

@@ -26,12 +26,6 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
 
     public function __construct(){
         parent::__construct();
-        // if ($this->__entity !== 'OAuth2') {
-        //     try {
-        //         $this->accessToSatuSehat();
-        //     } catch (\Throwable $th) {
-        //     }
-        // }
     }
 
     public function accessToSatuSehat(? string $token = null): bool{
@@ -61,7 +55,7 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
             $this->directAuth();
             return true;
         }
-        $this->findOrganization($satu_sehat_log);
+        $this->findOrganization();
         return true;
     }
 
@@ -77,19 +71,21 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
         return $this;
     }
 
-    private function findOrganization($satu_sehat_log){
-        $response = $satu_sehat_log['response'];
-        $organization = $this->schemaContract('OrganizationSatuSehat')->prepareFindOrganizationSatuSehat(
-            $this->requestDTO(config('app.contracts.OrganizationSatuSehatData'),[
-                'params' => [
-                    'id' => $response['organization_name']
-                ]
-            ])
-        );
-        if (isset($organization) && $organization->count() > 0) {
-            SatuSehat::setOrganization($organization->first());
-        }else{
-            throw new \Exception('Organization not found');
+    private function findOrganization(){
+        $organization_id = config('satu-sehat.organization_id');
+        if (isset($organization_id)){
+            $organization = $this->schemaContract('OrganizationSatuSehat')->prepareFindOrganizationSatuSehat(
+                $this->requestDTO(config('app.contracts.OrganizationSatuSehatData'),[
+                    'params' => [
+                        'id' => $organization_id
+                    ]
+                ])
+            );
+            if (isset($organization) && $organization->count() > 0) {
+                SatuSehat::setOrganization($organization->first());
+            }else{
+                throw new \Exception('Organization not found');
+            }
         }
     }
 
@@ -106,7 +102,7 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
             ]);
             $token = $this->o_auth2_model->response['access_token'];
             $this->initializeTokenize($token);
-            $this->findOrganization($satu_sehat);
+            $this->findOrganization();
         }
         return $this->o_auth2_model;
     }
