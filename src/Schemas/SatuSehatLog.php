@@ -19,6 +19,7 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
     protected $__status_code = null;
     protected $__response = null;
     protected $__payload = [];
+    protected $__method = 'GET';
     //protected mixed $__order_by_created_at = false; //asc, desc, false
 
     protected array $__cache = [
@@ -29,7 +30,24 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
         ]
     ];
 
-    protected function logSatuSehat(mixed $response, array $response_data, ?array $payload = [], ?array $query_params = []):Model{
+    protected function setMethod(string $method): self{
+        $this->__method = strtoupper($method);
+        return $this;
+    }
+
+    protected function getMethod(): string{
+        return $this->__method;
+    }
+
+     public function satuSehatLog(mixed $conditionals = null): Builder{
+        return $this->satuSehatEntity($conditionals);
+    }
+
+    protected function logSatuSehat(mixed $dto, mixed $response, array $response_data, ?array $payload = [], ?array $query_params = []):Model{
+        if (isset($dto->model)){
+            // $reference_type = $dto->model->getMorphClass();
+            // $reference_id = $dto->model->getKey();
+        }
         return $this->prepareStoreSatuSehatLog(
             $this->requestDTO(
                 config('app.contracts.SatuSehatLogData'),[
@@ -37,6 +55,9 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
                     'env_type' => config('satu-sehat.environment.env_type'),
                     'url' => SatuSehat::getSatuSehatUrl(),
                     'name' => $this->__entity,
+                    'method' => $this->getMethod(),
+                    'reference_type' => $reference_type ?? null,
+                    'reference_id' => $reference_id ?? null,
                     'status_code' => $response->getStatusCode(),
                     'headers' => $response->getHeaders(),
                     'params' => $query_params,

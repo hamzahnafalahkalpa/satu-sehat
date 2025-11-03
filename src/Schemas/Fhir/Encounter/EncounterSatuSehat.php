@@ -28,14 +28,14 @@ class EncounterSatuSehat extends OAuth2 implements ContractsEncounterSatuSehat
 
     public function prepareStoreEncounterSatuSehat(EncounterSatuSehatData $encounter_dto): Model{
         $encounter = SatuSehat::store('Encounter',$encounter_dto->form->payload->toArray());
-        $this->encounter_model = $this->logSatuSehat(SatuSehat::getResponse(),$encounter,SatuSehat::getPayload());
+        $this->encounter_model = $this->logSatuSehat($encounter_dto,SatuSehat::getResponse(),$encounter,SatuSehat::getPayload());
         return $this->encounter_model;
     }
 
     public function prepareViewEncounterSatuSehatList(?EncounterSatuSehatData $encounter_dto = null): Collection{
         $encounter_dto ??= $this->requestDTO(config('app.contracts.EncounterSatuSehatData'));
         $satu_sehat = SatuSehat::get('Encounter'.$encounter_dto->params->query);
-        $this->encounter_model = $this->logSatuSehat(SatuSehat::getResponse(),$satu_sehat);
+        $this->encounter_model = $this->logSatuSehat($encounter_dto,SatuSehat::getResponse(),$satu_sehat);
         return collect($satu_sehat['entry']);
     }
 

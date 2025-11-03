@@ -28,6 +28,11 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
         parent::__construct();
     }
 
+    public function useAccessToSatuSehat(): self{
+        $this->accessToSatuSehat();
+        return $this;
+    }
+
     public function accessToSatuSehat(? string $token = null): bool{
         $token ??= SatuSehat::getAccessToken();
         $satu_sehat_log = $this->SatuSehatLogModel();
@@ -36,7 +41,6 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
         }else{
             $satu_sehat_log = $satu_sehat_log->orderBy('created_at','desc')->where('name','OAuth2')->where('props->payload->client_id', SatuSehat::getClientId())->first();
         }
-
         if (!isset($satu_sehat_log)) {
             $this->directAuth();
             return true;
@@ -66,8 +70,10 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
     }
 
     private function directAuth(): self{
-        request()->merge(['access_validation' => false]);
-        $this->storeOAuth2();
+        request()->merge([
+            'access_validation' => false
+        ]);
+        $this->prepareStoreOauth2($this->requestDTO(config('app.contracts.OAuth2Data'),request()->all()));
         return $this;
     }
 
@@ -97,7 +103,7 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
                 'client_id'     => $o_auth2_dto->client_id,
                 'client_secret' => $o_auth2_dto->client_secret
             ]);
-            $this->o_auth2_model = $this->logSatuSehat(SatuSehat::getResponse(),$satu_sehat,SatuSehat::getPayload(),[
+            $this->o_auth2_model = $this->logSatuSehat($o_auth2_dto, SatuSehat::getResponse(),$satu_sehat,SatuSehat::getPayload(),[
                 'grant_type' => $o_auth2_dto->grant_type
             ]);
             $token = $this->o_auth2_model->response['access_token'];

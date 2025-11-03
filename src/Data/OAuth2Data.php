@@ -29,6 +29,10 @@ class OAuth2Data extends SatuSehatLogData implements DataOAuth2Data
     #[MapName('grant_type')]
     public ?string $grant_type = null;
 
+    #[MapInputName('model')]
+    #[MapName('model')]
+    public ?object $model = null;
+
     public static function before(array &$attributes){
         $attributes['access_validation'] ??= true;
         $attributes['name'] ??= 'OAuth2';

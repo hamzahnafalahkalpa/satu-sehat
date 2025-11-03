@@ -30,6 +30,9 @@ return new class extends Migration
             Schema::create($table_name, function (Blueprint $table) {
                 $table->ulid('id')->primary();
                 $table->string('name', 255)->nullable(false);
+                $table->string('reference_type', 36)->nullable();
+                $table->string('reference_id', 50)->nullable();
+                $table->string('method', 10)->default('GET')->nullable(false);
                 $table->string('env_type', 100)->nullable(false);
                 $table->text('url')->nullable(false);
                 $table->json('props')->nullable();

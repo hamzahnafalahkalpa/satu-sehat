@@ -25,6 +25,10 @@ class SatuSehatLogData extends Data implements DataSatuSehatLogData
     #[MapName('url')]
     public ?string $url = null;
 
+    #[MapInputName('model')]
+    #[MapName('model')]
+    public ?object $model = null;
+
     #[MapInputName('props')]
     #[MapName('props')]
     public ?array $props = null;

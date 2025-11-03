@@ -25,26 +25,16 @@ class PractitionerSatuSehat extends OAuth2 implements ContractsPractitionerSatuS
         ]
     ];
 
-    // public function __construct(){
-    //     parent::__construct();
-        // $this->setPractitionerExample();
-    // }
-
-    // private function setPractitionerExample(): self{
-    //     $this->__practitioner_examples = include __DIR__.'/data/practitioner-example-data.php';
-    //     return $this;
-    // }
-
     public function prepareStorePractitionerSatuSehat(PractitionerSatuSehatData $practitioner_satu_sehat_dto): Model{
         $practitioner = SatuSehat::store('Practitioner',$practitioner_satu_sehat_dto->form->payload->toArray());
-        $this->practitioner_satu_sehat_model = $this->logSatuSehat(SatuSehat::getResponse(),$practitioner,SatuSehat::getPayload());
+        $this->practitioner_satu_sehat_model = $this->logSatuSehat($practitioner_satu_sehat_dto,SatuSehat::getResponse(),$practitioner,SatuSehat::getPayload());
         return $this->practitioner_satu_sehat_model;
     }
 
     public function prepareViewPractitionerSatuSehatList(?PractitionerSatuSehatData $practitioner_satu_sehat_dto = null): Collection{
         $practitioner_satu_sehat_dto ??= $this->requestDTO(config('app.contracts.PractitionerSatuSehatData'));
         $satu_sehat = SatuSehat::get('Practitioner'.$practitioner_satu_sehat_dto->params->query);
-        $this->practitioner_satu_sehat_model = $this->logSatuSehat(SatuSehat::getResponse(),$satu_sehat);
+        $this->practitioner_satu_sehat_model = $this->logSatuSehat($practitioner_satu_sehat_dto,SatuSehat::getResponse(),$satu_sehat);
         return collect($satu_sehat['entry']);
     }
 

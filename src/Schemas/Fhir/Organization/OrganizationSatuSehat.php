@@ -27,21 +27,21 @@ class OrganizationSatuSehat extends OAuth2 implements ContractsOrganizationSatuS
 
     public function prepareStoreOrganizationSatuSehat(OrganizationSatuSehatData $organization_satu_sehat_dto): Model{
         $organization = SatuSehat::store('Organization',$organization_satu_sehat_dto->form->payload->toArray());
-        $this->organization_satu_sehat_model = $this->logSatuSehat(SatuSehat::getResponse(),$organization,SatuSehat::getPayload());
+        $this->organization_satu_sehat_model = $this->logSatuSehat($organization_satu_sehat_dto,SatuSehat::getResponse(),$organization,SatuSehat::getPayload());
         return $this->organization_satu_sehat_model;
     }
 
     public function prepareViewOrganizationSatuSehatList(?OrganizationSatuSehatData $organization_satu_sehat_dto = null): Collection{
         $organization_satu_sehat_dto ??= $this->requestDTO(config('app.contracts.OrganizationSatuSehatData'));
         $satu_sehat = SatuSehat::get('Organization'.$organization_satu_sehat_dto->params->query);
-        $this->organization_satu_sehat_model = $this->logSatuSehat(SatuSehat::getResponse(),$satu_sehat);
+        $this->organization_satu_sehat_model = $this->logSatuSehat($organization_satu_sehat_dto,SatuSehat::getResponse(),$satu_sehat);
         return collect($satu_sehat['entry']);
     }
 
     public function prepareFindOrganizationSatuSehat(?OrganizationSatuSehatData $organization_satu_sehat_dto = null): Model{
         $organization_satu_sehat_dto ??= $this->requestDTO(config('app.contracts.OrganizationSatuSehatData'));
         $satu_sehat = SatuSehat::get('Organization/'.$organization_satu_sehat_dto->params->id);
-        $this->organization_satu_sehat_model = $this->logSatuSehat(SatuSehat::getResponse(),$satu_sehat);
+        $this->organization_satu_sehat_model = $this->logSatuSehat($organization_satu_sehat_dto,SatuSehat::getResponse(),$satu_sehat);
         return $this->organization_satu_sehat_model;
     }
 

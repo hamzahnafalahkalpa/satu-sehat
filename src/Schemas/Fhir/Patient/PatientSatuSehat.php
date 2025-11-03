@@ -39,14 +39,14 @@ class PatientSatuSehat extends OAuth2 implements ContractsPatientSatuSehat
 
     public function prepareStorePatientSatuSehat(PatientSatuSehatData $patient_satu_sehat_dto): Model{
         $patient = SatuSehat::store('Patient',$patient_satu_sehat_dto->form->payload->toArray());
-        $this->patient_satu_sehat_model = $this->logSatuSehat(SatuSehat::getResponse(),$patient,SatuSehat::getPayload());
+        $this->patient_satu_sehat_model = $this->logSatuSehat($patient_satu_sehat_dto, SatuSehat::getResponse(),$patient,SatuSehat::getPayload());
         return $this->patient_satu_sehat_model;
     }
 
     public function prepareViewPatientSatuSehatList(?PatientSatuSehatData $patient_satu_sehat_dto = null): Collection{
         $patient_satu_sehat_dto ??= $this->requestDTO(config('app.contracts.PatientSatuSehatData'));
         $satu_sehat = SatuSehat::get('Patient'.$patient_satu_sehat_dto->params->query);
-        $this->patient_satu_sehat_model = $this->logSatuSehat(SatuSehat::getResponse(),$satu_sehat);
+        $this->patient_satu_sehat_model = $this->logSatuSehat($patient_satu_sehat_dto,SatuSehat::getResponse(),$satu_sehat);
         return collect($satu_sehat['entry']);
     }
 

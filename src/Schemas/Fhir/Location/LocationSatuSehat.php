@@ -27,21 +27,21 @@ class LocationSatuSehat extends OAuth2 implements ContractsLocationSatuSehat
 
     public function prepareStoreLocationSatuSehat(LocationSatuSehatData $location_satu_sehat_dto): Model{
         $location = SatuSehat::store('Location',$location_satu_sehat_dto->form->payload->toArray());
-        $this->location_satu_sehat_model = $this->logSatuSehat(SatuSehat::getResponse(),$location,SatuSehat::getPayload());
+        $this->location_satu_sehat_model = $this->logSatuSehat($location_satu_sehat_dto,SatuSehat::getResponse(),$location,SatuSehat::getPayload());
         return $this->location_satu_sehat_model;
     }
 
     public function prepareViewLocationSatuSehatList(?LocationSatuSehatData $location_satu_sehat_dto = null): Collection{
         $location_satu_sehat_dto ??= $this->requestDTO(config('app.contracts.LocationSatuSehatData'));
         $satu_sehat = SatuSehat::get('Location'.$location_satu_sehat_dto->params->query);
-        $this->location_satu_sehat_model = $this->logSatuSehat(SatuSehat::getResponse(),$satu_sehat);
+        $this->location_satu_sehat_model = $this->logSatuSehat($location_satu_sehat_dto,SatuSehat::getResponse(),$satu_sehat);
         return collect($satu_sehat['entry']);
     }
 
     public function prepareFindLocationSatuSehat(?LocationSatuSehatData $location_satu_sehat_dto = null): Model{
         $location_satu_sehat_dto ??= $this->requestDTO(config('app.contracts.LocationSatuSehatData'));
         $satu_sehat = SatuSehat::get('Location/'.$location_satu_sehat_dto->params->id);
-        $this->location_satu_sehat_model = $this->logSatuSehat(SatuSehat::getResponse(),$satu_sehat);
+        $this->location_satu_sehat_model = $this->logSatuSehat($location_satu_sehat_dto,SatuSehat::getResponse(),$satu_sehat);
         return $this->location_satu_sehat_model;
     }
 

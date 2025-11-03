@@ -29,14 +29,14 @@ class MasterSaranaSatuSehat extends OAuth2 implements ContractsMasterSaranaSatuS
 
     public function prepareStoreMasterSaranaSatuSehat(MasterSaranaSatuSehatData $master_sarana_dto): Model{
         $patient = SatuSehat::store('MasterSarana',$master_sarana_dto->form->payload->toArray());
-        $this->master_sarana_model = $this->logSatuSehat(SatuSehat::getResponse(),$patient,SatuSehat::getPayload());
+        $this->master_sarana_model = $this->logSatuSehat($master_sarana_dto,SatuSehat::getResponse(),$patient,SatuSehat::getPayload());
         return $this->master_sarana_model;
     }
 
     public function prepareViewMasterSaranaSatuSehatList(?MasterSaranaSatuSehatData $master_sarana_dto = null): Collection{
         $master_sarana_dto ??= $this->requestDTO(config('app.contracts.MasterSaranaSatuSehatData'));
         $satu_sehat = SatuSehat::getSatuSehat('masterdata/v1/mastersaranaindex/mastersarana'.$master_sarana_dto->params->query);
-        $this->master_sarana_model = $this->logSatuSehat(SatuSehat::getResponse(),$satu_sehat);
+        $this->master_sarana_model = $this->logSatuSehat($master_sarana_dto,SatuSehat::getResponse(),$satu_sehat);
         return collect($satu_sehat['data']);
     }
 
