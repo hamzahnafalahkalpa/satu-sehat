@@ -43,7 +43,7 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
         return $this->satuSehatEntity($conditionals);
     }
 
-    protected function logSatuSehat(mixed $dto, mixed $response, array $response_data, ?array $payload = [], ?array $query_params = []):Model{
+    protected function logSatuSehat(mixed $dto, mixed $response, ?array $response_data = [], ?array $payload = [], ?array $query_params = []):Model{
         if (isset($dto->model)){
             // $reference_type = $dto->model->getMorphClass();
             // $reference_id = $dto->model->getKey();

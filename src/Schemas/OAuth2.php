@@ -73,7 +73,7 @@ class OAuth2 extends SatuSehatLog implements ContractsOAuth2
         request()->merge([
             'access_validation' => false
         ]);
-        $this->prepareStoreOauth2($this->requestDTO(config('app.contracts.OAuth2Data'),request()->all()));
+        $this->schemaContract('OAuth2')->prepareStoreOauth2($this->requestDTO(config('app.contracts.OAuth2Data'),request()->all()));
         return $this;
     }
 

@@ -38,8 +38,23 @@ class PatientSatuSehat extends OAuth2 implements ContractsPatientSatuSehat
     }
 
     public function prepareStorePatientSatuSehat(PatientSatuSehatData $patient_satu_sehat_dto): Model{
-        $patient = SatuSehat::store('Patient',$patient_satu_sehat_dto->form->payload->toArray());
-        $this->patient_satu_sehat_model = $this->logSatuSehat($patient_satu_sehat_dto, SatuSehat::getResponse(),$patient,SatuSehat::getPayload());
+        $payload = $patient_satu_sehat_dto->form->payload->toArray();
+        try {
+            $patient = SatuSehat::store('Patient',$payload);
+        } catch (\Exception $e) {
+            $patient = SatuSehat::getResponse()->json();
+            if (isset($patient['issue']) && $patient['issue'][0]['code'] === 'duplicate') {
+                $patient = $this->prepareViewPatientSatuSehatList($this->requestDTO(config('app.contracts.PatientSatuSehatData'),[
+                    'params' => [
+                        "name" => $payload['name'][0]['text'],
+                        "birthdate" => $payload['birthDate'],
+                        "gender" => $payload['gender']
+                    ]
+                ]));
+                if (isset($patient) && count($patient) == 1) $patient = $patient->first()['resource'];
+            }
+        }
+        $this->patient_satu_sehat_model = $this->logSatuSehat($patient_satu_sehat_dto, SatuSehat::getResponse(), $patient ?? null,SatuSehat::getPayload());
         return $this->patient_satu_sehat_model;
     }
 

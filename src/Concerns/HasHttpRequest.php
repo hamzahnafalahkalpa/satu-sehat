@@ -56,8 +56,8 @@ trait HasHttpRequest{
     }
 
     protected function responseHandler($response, ?callable $on_success = null, ?callable $on_failed = null){
-        if ($response->successful()) {
-            $data = $response->json();
+        $data = $response->json();
+        if ($response->successful() ) {
             if (isset($on_success)) $on_success($data);
             return $data;
         } elseif ($response->clientError() || $response->serverError()) {
@@ -67,4 +67,34 @@ trait HasHttpRequest{
             throw new \Exception($response->body());
         }
     }
+
+    // protected function responseHandler($response, ?callable $on_success = null, ?callable $on_failed = null)
+    // {
+    //     $json = $response->json();
+    //     $status = $response->status();
+
+    //     // Kalau 2xx → sukses normal
+    //     if ($response->successful()) {
+    //         return $on_success ? $on_success($json, $response) : $json;
+    //     }
+
+    //     // Kalau 4xx/5xx tapi masih ada JSON → tetap lempar ke callback success,
+    //     // tapi tandai is_error agar bisa dibedain
+    //     if ($response->failed() && is_array($json)) {
+    //         // $json['_meta'] = [
+    //         //     'is_error' => true,
+    //         //     'status' => $status,
+    //         //     'reason' => $response->reason(),
+    //         // ];
+    //         return $on_success ? $on_success($json, $response) : $json;
+    //     }
+
+    //     // Kalau total gagal dan gak ada JSON
+    //     if ($on_failed) {
+    //         return $on_failed($response);
+    //     }
+
+    //     return null;
+    // }
+
 }
