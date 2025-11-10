@@ -35,6 +35,8 @@ return new class extends Migration
                 $table->string('method', 10)->default('GET')->nullable(false);
                 $table->string('env_type', 100)->nullable(false);
                 $table->text('url')->nullable(false);
+                $table->string('status',50)->nullable();
+                $table->timestamp('expired_at')->nullable();
                 $table->json('props')->nullable();
                 $table->timestamps();
             });

@@ -51,7 +51,6 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
         return $this->prepareStoreSatuSehatLog(
             $this->requestDTO(
                 config('app.contracts.SatuSehatLogData'),[
-                    'name' => $this->__entity,
                     'env_type' => config('satu-sehat.environment.env_type'),
                     'url' => SatuSehat::getSatuSehatUrl(),
                     'name' => $this->__entity,

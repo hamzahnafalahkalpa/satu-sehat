@@ -20,14 +20,34 @@ class SatuSehatLog extends BaseModel
     public $list = [
         'id',
         'name',
+        'reference_type',
+        'reference_id',
+        'method',
         'env_type',
         'url',
         'props'
     ];
 
     protected $casts = [
-        'name' => 'string'
+        'name' => 'string',
+        'reference_type' => 'string',
+        'reference_id' => 'string',
+        'method' => 'string',
+        'env_type' => 'string',
+        'url' => 'string'
     ];
+
+    protected static function booted(): void{
+        parent::booted();
+        static::addGlobalScope('name',function($query){
+            $morph = (new static)->getMorphClass();
+            if ($morph !== 'SatuSehatLog'){
+                $query->where(function($query) use ($morph){
+                    $query->where('name',$morph);
+                });
+            }
+        });
+    }
 
     public function viewUsingRelation(): array{
         return [];
