@@ -3,7 +3,6 @@
 namespace Hanafalah\SatuSehat;
 
 use Hanafalah\SatuSehat\Contracts\SatuSehat as ContractsSatuSehat;
-use Hanafalah\SatuSehat\Facades\SatuSehat as FacadesSatuSehat;
 use Hanafalah\SatuSehat\Supports\BaseSatuSehat;
 use Illuminate\Support\Facades\Http;
 
