@@ -40,13 +40,13 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
     }
 
      public function satuSehatLog(mixed $conditionals = null): Builder{
-        return $this->satuSehatEntity($conditionals);
+        return $this->usingEntity()->conditionals($conditionals);
     }
 
     protected function logSatuSehat(mixed $dto, mixed $response, ?array $response_data = [], ?array $payload = [], ?array $query_params = []):Model{
         if (isset($dto->model)){
-            // $reference_type = $dto->model->getMorphClass();
-            // $reference_id = $dto->model->getKey();
+            $reference_type = $dto->model->getMorphClass();
+            $reference_id = $dto->model->getKey();
         }
         return $this->prepareStoreSatuSehatLog(
             $this->requestDTO(

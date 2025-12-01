@@ -39,6 +39,7 @@ class PatientSatuSehat extends OAuth2 implements ContractsPatientSatuSehat
 
     public function prepareStorePatientSatuSehat(PatientSatuSehatData $patient_satu_sehat_dto): Model{
         $payload = $patient_satu_sehat_dto->form->payload->toArray();
+        $model = $patient_satu_sehat_dto->model;
         try {
             $patient = SatuSehat::store('Patient',$payload);
         } catch (\Exception $e) {
@@ -51,8 +52,21 @@ class PatientSatuSehat extends OAuth2 implements ContractsPatientSatuSehat
                         "gender" => $payload['gender']
                     ]
                 ]));
-                if (isset($patient) && count($patient) == 1) $patient = $patient->first()['resource'];
-            }
+                if (isset($patient)) {
+                    if (count($patient) == 1){
+                        $patient = $patient->first()['resource'];
+                    }else{
+                        $patient = $patient->toArray();
+                        if (isset($model)){
+                            $integration = $model->integration;
+                            $satu_sehat = $integration['satu_sehat'];
+                            $satu_sehat['patient_lists'] = $patient;
+                            $model->setAttribute('integration',$integration);
+                            $model->save();
+                        }
+                    }
+                }
+            } 
         }
         $this->patient_satu_sehat_model = $this->logSatuSehat($patient_satu_sehat_dto, SatuSehat::getResponse(), $patient ?? null,SatuSehat::getPayload());
         return $this->patient_satu_sehat_model;
