@@ -17,6 +17,18 @@ class SatuSehatLogData extends Data implements DataSatuSehatLogData
     #[MapName('name')]
     public ?string $name = null;
 
+    #[MapInputName('reference_type')]
+    #[MapName('reference_type')]
+    public ?string $reference_type = null;
+
+    #[MapInputName('reference_id')]
+    #[MapName('reference_id')]
+    public mixed $reference_id = null;
+
+    #[MapInputName('method')]
+    #[MapName('method')]
+    public ?string $method = null;
+
     #[MapInputName('env_type')]
     #[MapName('env_type')]
     public ?string $env_type = null;

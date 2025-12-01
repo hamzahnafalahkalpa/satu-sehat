@@ -46,15 +46,17 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
     protected function logSatuSehat(mixed $dto, mixed $response, ?array $response_data = [], ?array $payload = [], ?array $query_params = []):Model{
         if (isset($dto->model)){
             $reference_type = $dto->model->getMorphClass();
-            $reference_id = $dto->model->getKey();
+            $reference_id   = $dto->model->getKey();
         }
+        $reference_type ??= $payload['reference_type'];
+        $reference_id ??= $payload['reference_id'];
         return $this->prepareStoreSatuSehatLog(
             $this->requestDTO(
                 config('app.contracts.SatuSehatLogData'),[
                     'env_type' => config('satu-sehat.environment.env_type'),
                     'url' => SatuSehat::getSatuSehatUrl(),
-                    'name' => $this->__entity,
-                    'method' => $this->getMethod(),
+                    'name' => $payload['name'] ?? $this->__entity,
+                    'method' => $payload['method'] ?? $this->getMethod(),
                     'reference_type' => $reference_type ?? null,
                     'reference_id' => $reference_id ?? null,
                     'status_code' => $response->getStatusCode(),

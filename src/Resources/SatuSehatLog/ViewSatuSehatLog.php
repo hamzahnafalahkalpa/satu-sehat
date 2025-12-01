@@ -17,6 +17,8 @@ class ViewSatuSehatLog extends ApiResource
     $arr = [
       'id' => $this->id,
       'name' => $this->name,
+      'reference_type' => $this->reference_type,      
+      'reference_id' => $this->reference_id,
       'api_resource' => [
         'status_code' => $this->status_code,
         'headers' => $this->headers,

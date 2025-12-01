@@ -34,7 +34,7 @@ return new class extends Migration
                 $table->string('reference_id', 50)->nullable();
                 $table->string('method', 10)->default('GET')->nullable(false);
                 $table->string('env_type', 100)->nullable(false);
-                $table->text('url')->nullable(false);
+                $table->text('url')->nullable();
                 $table->string('status',50)->nullable();
                 $table->timestamp('expired_at')->nullable();
                 $table->json('props')->nullable();
