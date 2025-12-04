@@ -48,14 +48,19 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
             $reference_type = $dto->model->getMorphClass();
             $reference_id   = $dto->model->getKey();
         }
-        $reference_type ??= $payload['reference_type'];
-        $reference_id ??= $payload['reference_id'];
+        $reference_type ??= $payload['reference_type'] ?? null;
+        $reference_id ??= $payload['reference_id'] ?? null;
+        if (isset($payload['name']) && !is_array($payload['name'])){
+            $name = $payload['name'] ?? $this->__entity;
+        }else{
+            $name = $this->__entity;
+        }
         return $this->prepareStoreSatuSehatLog(
             $this->requestDTO(
                 config('app.contracts.SatuSehatLogData'),[
                     'env_type' => config('satu-sehat.environment.env_type'),
                     'url' => SatuSehat::getSatuSehatUrl(),
-                    'name' => $payload['name'] ?? $this->__entity,
+                    'name' => $name,
                     'method' => $payload['method'] ?? $this->getMethod(),
                     'reference_type' => $reference_type ?? null,
                     'reference_id' => $reference_id ?? null,
