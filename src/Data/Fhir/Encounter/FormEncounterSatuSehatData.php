@@ -31,6 +31,10 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
     #[MapName('organization_code')]
     public string $organization_code;
 
+    #[MapInputName('encounter_code')]
+    #[MapName('encounter_code')]
+    public string $encounter_code;
+
     #[MapInputName('visit_code')]
     #[MapName('visit_code')]
     public string $visit_code;
@@ -94,13 +98,14 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
 
     private function setIdentifier(array &$attributes): self{
         $identifier = &$attributes['payload']['identifier'];
-        if (isset($attributes['organization_code']) && isset($attributes['visit_code'])){
+        // if (isset($attributes['organization_code']) && isset($attributes['visit_code'])){
+        if (isset($attributes['encounter_code']) && isset($attributes['visit_code'])){
             $identifier[] = [
-                'system' => 'http://sys-ids.kemkes.go.id/encounter/'.$attributes['organization_code'],
+                'system' => 'http://sys-ids.kemkes.go.id/encounter/'.$attributes['encounter_code'],
                 'value' => $attributes['visit_code']
             ];
         }else{
-            throw new \Exception('org_id or visit_code not found');
+            throw new \Exception('encounter_code or visit_code not found');
         }
 
         return $this;
@@ -138,6 +143,7 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
     }
 
     private function setParticipant(array &$attributes): self{
+        if (!isset($attributes['participant'])) return $this;
         $participants = &$attributes['payload']['participant'];
         $temp_participants = [];
         foreach ($attributes['participant'] as $key => $participant_attrs) {

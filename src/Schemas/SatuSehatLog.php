@@ -68,7 +68,8 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
                     'headers' => $response->getHeaders(),
                     'params' => $query_params,
                     'payload' => $payload,
-                    'response' => $response_data
+                    'response' => $response_data,
+                    'raw_payload' => $dto->raw_payload ?? null,
                 ])
         );
     }

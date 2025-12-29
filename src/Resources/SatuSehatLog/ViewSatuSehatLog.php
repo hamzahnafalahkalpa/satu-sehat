@@ -24,7 +24,8 @@ class ViewSatuSehatLog extends ApiResource
         'headers' => $this->headers,
         'params' => $this->params,
         'payload' => $this->payload,
-        'response' => $this->response
+        'response' => $this->response,
+        'raw_payload' => $this->raw_payload ?? null,
       ]
     ];
     return $arr;

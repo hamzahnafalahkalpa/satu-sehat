@@ -13,6 +13,10 @@ class OAuth2Data extends SatuSehatLogData implements DataOAuth2Data
     #[MapName('client_id')]
     public ?string $client_id = null;
 
+    #[MapInputName('raw_payload')]
+    #[MapName('raw_payload')]
+    public ?array $raw_payload = null;
+
     #[MapInputName('client_secret')]
     #[MapName('client_secret')]
     public ?string $client_secret = null;
