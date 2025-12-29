@@ -149,6 +149,7 @@ class FormLocationSatuSehatData extends Data implements DataFormLocationSatuSeha
         $address = &$attributes['payload']['address'];
         if (isset($attributes['address'])){
             $incoming_address = $attributes['address'];
+            if (!isset($incoming_address['name'])) return $this;
             $address = [
                 'use' => $incoming_address['use'] ?? 'work',
                 'line' => [$incoming_address['name']],
@@ -166,6 +167,7 @@ class FormLocationSatuSehatData extends Data implements DataFormLocationSatuSeha
                 'province_code','city_code','district_code','village_code','rt','rw'
             ];
             foreach ($deep_attrs as $deep_attr) {
+                if (!isset($incoming_address[$deep_attr])) continue;
                 $code = Str::before($deep_attr, '_code') ?? $deep_attr;
                 $deep_extension[] = [
                     'url' => $code,

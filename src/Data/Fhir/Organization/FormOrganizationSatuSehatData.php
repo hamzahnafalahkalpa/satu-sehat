@@ -142,6 +142,7 @@ class FormOrganizationSatuSehatData extends Data implements DataFormOrganization
                     'province_code','city_code','district_code','village_code','rt','rw'
                 ];
                 foreach ($deep_attrs as $deep_attr) {
+                    if (!isset($incoming_address[$deep_attr])) continue;
                     $code = Str::before($deep_attr, '_code') ?? $deep_attr;
                     $deep_extension[] = [
                         'url' => $code,
