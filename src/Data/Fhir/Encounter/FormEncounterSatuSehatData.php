@@ -41,7 +41,7 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
 
     #[MapInputName('patient_code')]
     #[MapName('patient_code')]
-    public string $patient_code;
+    public ?string $patient_code = null;
 
     #[MapInputName('patient_name')]
     #[MapName('patient_name')]
