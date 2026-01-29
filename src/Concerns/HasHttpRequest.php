@@ -35,7 +35,7 @@ trait HasHttpRequest{
     }
 
     protected function postAuth(string $url,$payload, ?callable $on_success = null, ?callable $on_failed = null){
-        $url = ltrim($url, '/');    
+        $url = ltrim($url, '/');   
         $this->__satu_sehat_url = $this->getCurrentAuthHost().'/'.$url;
         $response = $this->http()->asForm()->post($this->__satu_sehat_url, $payload);
         $this->__response = $response;

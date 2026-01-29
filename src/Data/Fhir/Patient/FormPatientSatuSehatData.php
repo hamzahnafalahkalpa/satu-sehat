@@ -131,6 +131,7 @@ class FormPatientSatuSehatData extends Data implements DataFormPatientSatuSehatD
                 ];
                 foreach ($deep_attrs as $deep_attr) {
                     $code = Str::before($deep_attr, '_code') ?? $deep_attr;
+                    if (!isset($incoming_address[$deep_attr])) continue;
                     $deep_extension[] = [
                         'url' => $code,
                         'valueCode' => $incoming_address[$deep_attr]
