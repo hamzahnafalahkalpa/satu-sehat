@@ -60,6 +60,7 @@ class FormPatientSatuSehatData extends Data implements DataFormPatientSatuSehatD
 
     public static function before(array &$attributes){
         $new = static::new();        
+        $attributes['payload'] ??= [];
         $payload = &$attributes['payload'];
         $attributes['active'] ??= true;
         $attributes['deceased_boolean'] ??= true;

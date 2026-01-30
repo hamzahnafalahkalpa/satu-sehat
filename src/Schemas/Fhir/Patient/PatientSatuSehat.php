@@ -55,15 +55,15 @@ class PatientSatuSehat extends OAuth2 implements ContractsPatientSatuSehat
                 if (isset($patient)) {
                     if (count($patient) == 1){
                         $patient = $patient->first()['resource'];
-                    }else{
-                        $patient = $patient->toArray();
-                        if (isset($model)){
-                            $integration = $model->integration;
-                            $satu_sehat = $integration['satu_sehat'];
-                            $satu_sehat['patient_lists'] = $patient;
-                            $model->setAttribute('integration',$integration);
-                            $model->save();
-                        }
+                    // }else{
+                        // $patient = $patient->toArray();
+                        // if (isset($model)){
+                        //     $integration = $model->integration;
+                        //     $satu_sehat = $integration['satu_sehat'];
+                        //     $satu_sehat['patient_lists'] = $patient;
+                        //     $model->setAttribute('integration',$integration);
+                        //     $model->save();
+                        // }
                     }
                 }
             } 

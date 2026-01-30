@@ -10,6 +10,7 @@ use Hanafalah\SatuSehat\{
 use Hanafalah\SatuSehat\Contracts\Schemas\SatuSehatLog as ContractsSatuSehatLog;
 use Hanafalah\SatuSehat\Contracts\Data\SatuSehatLogData;
 use Hanafalah\SatuSehat\Facades\SatuSehat;
+use Illuminate\Support\Collection;
 
 class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
 {
@@ -43,7 +44,10 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
         return $this->usingEntity()->conditionals($conditionals);
     }
 
-    protected function logSatuSehat(mixed $dto, mixed $response, ?array $response_data = [], ?array $payload = [], ?array $query_params = []):Model{
+    protected function logSatuSehat(mixed $dto, mixed $response, array|Collection|null $response_data = [], ?array $payload = [], ?array $query_params = []):Model{
+        if (isset($response_data) && $response_data instanceof Collection){
+            $response_data = $response_data->toArray();
+        }
         if (isset($dto->model)){
             $reference_type = $dto->model->getMorphClass();
             $reference_id   = $dto->model->getKey();
