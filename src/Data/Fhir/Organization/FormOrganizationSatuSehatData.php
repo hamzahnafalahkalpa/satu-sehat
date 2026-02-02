@@ -23,7 +23,7 @@ class FormOrganizationSatuSehatData extends Data implements DataFormOrganization
 
     #[MapInputName('organization_code')]
     #[MapName('organization_code')]
-    public ?string $organization_code = null;
+    public mixed $organization_code = null;
 
     #[MapInputName('organization_name')]
     #[MapName('organization_name')]
@@ -80,7 +80,9 @@ class FormOrganizationSatuSehatData extends Data implements DataFormOrganization
                 'value' => $attributes['organization_name']
             ];
         }else{
-            throw new \Exception('organization_code or organization_name not found');
+            if (!isset($attributes['organization_name'])){
+                throw new \Exception('organization_code or organization_name not found');
+            }
         }
         return $this;
     }

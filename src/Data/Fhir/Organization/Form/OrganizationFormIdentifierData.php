@@ -27,7 +27,7 @@ class OrganizationFormIdentifierData extends Data implements DataOrganizationFor
 
     #[MapInputName('value')]
     #[MapName('value')]
-    public ?string $value = null;
+    public mixed $value = null;
 
     public static function before(array &$attributes){
         $attributes['use'] ??= 'official';

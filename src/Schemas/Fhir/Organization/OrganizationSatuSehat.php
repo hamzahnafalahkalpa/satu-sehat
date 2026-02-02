@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Hanafalah\SatuSehat\Facades\SatuSehat;
 use Hanafalah\SatuSehat\Schemas\OAuth2;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class OrganizationSatuSehat extends OAuth2 implements ContractsOrganizationSatuSehat
 {
@@ -26,7 +27,25 @@ class OrganizationSatuSehat extends OAuth2 implements ContractsOrganizationSatuS
     ];
 
     public function prepareStoreOrganizationSatuSehat(OrganizationSatuSehatData $organization_satu_sehat_dto): Model{
-        $organization = SatuSehat::store('Organization',$organization_satu_sehat_dto->form->payload->toArray());
+        $payload = $organization_satu_sehat_dto->form->payload->toArray();
+        try {            
+            $organization = SatuSehat::store('Organization',$payload);
+        } catch (\Throwable $th) {
+            $organization = SatuSehat::getResponse()->json();
+            if (isset($organization['issue']) && $organization['issue'][0]['code'] === 'duplicate') {
+                $organization = $this->prepareViewOrganizationSatuSehatList($this->requestDTO(config('app.contracts.OrganizationSatuSehatData'),[
+                    'params' => [
+                        "name" => $payload->name,
+                        'partof' => Str::after($payload->partOf['reference'],'Organization/')
+                    ]
+                ]));
+                if (isset($organization)) {
+                    if (count($organization) == 1){
+                        $organization = $organization->first()['resource'];
+                    }
+                }
+            } 
+        }
         $this->organization_satu_sehat_model = $this->logSatuSehat($organization_satu_sehat_dto,SatuSehat::getResponse(),$organization,SatuSehat::getPayload());
         return $this->organization_satu_sehat_model;
     }
