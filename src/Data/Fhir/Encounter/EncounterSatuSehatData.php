@@ -27,6 +27,7 @@ class EncounterSatuSehatData extends OAuth2Data implements DataEncounterSatuSeha
     public ?ParamEncounterSatuSehatData $params = null;
 
     public static function before(array &$attributes){
+        $attributes['raw_payload'] = $attributes['form'] ?? $attributes['params'];
         $attributes['name'] ??= 'EncounterSatuSehat';
         parent::before($attributes);
     }

@@ -27,6 +27,7 @@ class PatientSatuSehatData extends OAuth2Data implements DataPatientSatuSehatDat
     public ?ParamPatientSatuSehatData $params = null;
 
     public static function before(array &$attributes){
+        $attributes['raw_payload'] = $attributes['form'] ?? $attributes['params'];
         $attributes['name'] ??= 'PatientSatuSehat';
         parent::before($attributes);
     }

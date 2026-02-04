@@ -59,6 +59,7 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
         }else{
             $name = $this->__entity;
         }
+
         return $this->prepareStoreSatuSehatLog(
             $this->requestDTO(
                 config('app.contracts.SatuSehatLogData'),[

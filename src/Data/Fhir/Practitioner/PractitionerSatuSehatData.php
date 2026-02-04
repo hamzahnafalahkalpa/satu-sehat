@@ -27,6 +27,7 @@ class PractitionerSatuSehatData extends OAuth2Data implements DataPractitionerSa
     public ?ParamPractitionerSatuSehatData $params = null;
 
     public static function before(array &$attributes){
+        $attributes['raw_payload'] = $attributes['form'] ?? $attributes['params'];
         $attributes['name'] ??= 'PractitionerSatuSehat';
         parent::before($attributes);
     }

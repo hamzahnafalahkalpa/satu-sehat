@@ -27,6 +27,7 @@ class OrganizationSatuSehatData extends OAuth2Data implements DataOrganizationSa
     public ?ParamOrganizationSatuSehatData $params = null;
 
     public static function before(array &$attributes){
+        $attributes['raw_payload'] = $attributes['form'] ?? $attributes['params'];
         $attributes['name'] ??= 'OrganizationSatuSehat';
         parent::before($attributes);
     }

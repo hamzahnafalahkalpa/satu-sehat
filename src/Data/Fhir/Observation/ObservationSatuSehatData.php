@@ -27,7 +27,7 @@ class ObservationSatuSehatData extends OAuth2Data implements DataObservationSatu
     public ?ParamObservationSatuSehatData $params = null;
 
     public static function before(array &$attributes){
-        $attributes['raw_payload'] = $attributes['form'];
+        $attributes['raw_payload'] = $attributes['form'] ?? $attributes['params'];
         $attributes['name'] ??= 'ObservationSatuSehat';
         parent::before($attributes);
     }

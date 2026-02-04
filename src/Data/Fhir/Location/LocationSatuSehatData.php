@@ -27,6 +27,7 @@ class LocationSatuSehatData extends OAuth2Data implements DataLocationSatuSehatD
     public ?ParamLocationSatuSehatData $params = null;
 
     public static function before(array &$attributes){
+        $attributes['raw_payload'] = $attributes['form'] ?? $attributes['params'];
         $attributes['name'] ??= 'LocationSatuSehat';
         parent::before($attributes);
     }
