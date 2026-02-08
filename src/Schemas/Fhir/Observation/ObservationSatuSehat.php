@@ -27,6 +27,7 @@ class ObservationSatuSehat extends OAuth2 implements ContractsObservationSatuSeh
     ];
 
     public function prepareStoreObservationSatuSehat(ObservationSatuSehatData $observation_dto): Model{
+        $this->setMethod('POST');
         $observation = SatuSehat::store('',$observation_dto->form->payload);
         $this->observation_model = $this->logSatuSehat($observation_dto,SatuSehat::getResponse(),$observation,SatuSehat::getPayload());
         return $this->observation_model;

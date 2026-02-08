@@ -38,6 +38,7 @@ class PatientSatuSehat extends OAuth2 implements ContractsPatientSatuSehat
     }
 
     public function prepareStorePatientSatuSehat(PatientSatuSehatData $patient_satu_sehat_dto): Model{
+        $this->setMethod('POST');
         $payload = $patient_satu_sehat_dto->form->payload->toArray();
         $model = $patient_satu_sehat_dto->model;
         try {
@@ -52,8 +53,9 @@ class PatientSatuSehat extends OAuth2 implements ContractsPatientSatuSehat
                         "gender" => $payload['gender']
                     ]
                 ]));
+
                 if (isset($patient)) {
-                    if (count($patient) == 1){
+                    if (count($patient) > 1){
                         $patient = $patient->first()['resource'];
                     // }else{
                         // $patient = $patient->toArray();

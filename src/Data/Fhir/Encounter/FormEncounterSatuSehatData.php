@@ -66,11 +66,11 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
 
     #[MapInputName('location_code')]
     #[MapName('location_code')]
-    public string $location_code;
+    public ?string $location_code = null;
 
     #[MapInputName('location_name')]
     #[MapName('location_name')]
-    public string $location_name;
+    public ?string $location_name = null;
 
     public static function before(array &$attributes){
         $new = static::new();       

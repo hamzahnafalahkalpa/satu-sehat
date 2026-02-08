@@ -27,6 +27,7 @@ class LocationSatuSehat extends OAuth2 implements ContractsLocationSatuSehat
 
     public function prepareStoreLocationSatuSehat(LocationSatuSehatData $location_satu_sehat_dto): Model{
         $payload = $location_satu_sehat_dto->form->payload->toArray();
+        $this->setMethod('POST');
         try {            
             $location = SatuSehat::store('Location',$payload);
         } catch (\Throwable $th) {
