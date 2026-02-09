@@ -54,11 +54,11 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
         }
         $reference_type ??= $payload['reference_type'] ?? null;
         $reference_id ??= $payload['reference_id'] ?? null;
-        if (isset($payload['name']) && !is_array($payload['name'])){
-            $name = $payload['name'] ?? $this->__entity;
-        }else{
+        // if (isset($payload['name']) && !is_array($payload['name'])){
+        //     $name = $payload['name'] ?? $this->__entity;
+        // }else{
             $name = $this->__entity;
-        }
+        // }
 
         return $this->prepareStoreSatuSehatLog(
             $this->requestDTO(
