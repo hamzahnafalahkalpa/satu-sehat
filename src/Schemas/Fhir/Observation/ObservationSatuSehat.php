@@ -11,6 +11,7 @@ use Hanafalah\SatuSehat\Contracts\Schemas\Fhir\Observation\{
 use Hanafalah\SatuSehat\Facades\SatuSehat;
 use Hanafalah\SatuSehat\Schemas\OAuth2;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class ObservationSatuSehat extends OAuth2 implements ContractsObservationSatuSehat
 {
@@ -28,8 +29,16 @@ class ObservationSatuSehat extends OAuth2 implements ContractsObservationSatuSeh
 
     public function prepareStoreObservationSatuSehat(ObservationSatuSehatData $observation_dto): Model{
         $this->setMethod('POST');
-        $observation = SatuSehat::store('',$observation_dto->form->payload);
-        $this->observation_model = $this->logSatuSehat($observation_dto,SatuSehat::getResponse(),$observation,SatuSehat::getPayload());
+        try {
+            $observation = SatuSehat::store('',$observation_dto->form->payload);
+        } catch (\Throwable $th) {
+            Log::channel('satu-sehat')->error("Failed to send observation to Satu Sehat", [
+                'dto' => $observation_dto->toArray(),
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString()
+            ]);
+        }
+        $this->observation_model = $this->logSatuSehat($observation_dto,SatuSehat::getResponse(),$observation ?? null,SatuSehat::getPayload());
         return $this->observation_model;
     }
 

@@ -40,7 +40,6 @@ class PatientSatuSehat extends OAuth2 implements ContractsPatientSatuSehat
     public function prepareStorePatientSatuSehat(PatientSatuSehatData $patient_satu_sehat_dto): Model{
         $this->setMethod('POST');
         $payload = $patient_satu_sehat_dto->form->payload->toArray();
-        $model = $patient_satu_sehat_dto->model;
         try {
             $patient = SatuSehat::store('Patient',$payload);
         } catch (\Exception $e) {

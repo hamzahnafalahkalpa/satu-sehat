@@ -33,11 +33,11 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
 
     #[MapInputName('encounter_code')]
     #[MapName('encounter_code')]
-    public string $encounter_code;
+    public ?string $encounter_code = null;
 
     #[MapInputName('visit_code')]
     #[MapName('visit_code')]
-    public string $visit_code;
+    public ?string $visit_code = null;
 
     #[MapInputName('patient_code')]
     #[MapName('patient_code')]
@@ -104,8 +104,8 @@ class FormEncounterSatuSehatData extends Data implements DataFormEncounterSatuSe
                 'system' => 'http://sys-ids.kemkes.go.id/encounter/'.$attributes['encounter_code'],
                 'value' => $attributes['visit_code']
             ];
-        }else{
-            throw new \Exception('encounter_code or visit_code not found');
+        // }else{
+        //     throw new \Exception('encounter_code or visit_code not found');
         }
 
         return $this;

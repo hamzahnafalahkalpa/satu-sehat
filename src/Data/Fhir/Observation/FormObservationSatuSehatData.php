@@ -16,11 +16,11 @@ class FormObservationSatuSehatData extends Data implements DataFormObservationSa
 {
     #[MapInputName('encounter_display')]
     #[MapName('encounter_display')]
-    public string $encounter_display;
+    public ?string $encounter_display = null;
 
     #[MapInputName('encounter_code')]
     #[MapName('encounter_code')]
-    public string $encounter_code;
+    public ?string $encounter_code = null;
 
     #[MapInputName('organization_code')]
     #[MapName('organization_code')]
@@ -28,7 +28,7 @@ class FormObservationSatuSehatData extends Data implements DataFormObservationSa
 
     #[MapInputName('patient_code')]
     #[MapName('patient_code')]
-    public string $patient_code;
+    public ?string $patient_code = null;
 
     #[MapInputName('status')]
     #[MapName('status')]

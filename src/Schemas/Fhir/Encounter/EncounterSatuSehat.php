@@ -11,6 +11,7 @@ use Hanafalah\SatuSehat\Contracts\Schemas\Fhir\Encounter\{
 use Hanafalah\SatuSehat\Facades\SatuSehat;
 use Hanafalah\SatuSehat\Schemas\OAuth2;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class EncounterSatuSehat extends OAuth2 implements ContractsEncounterSatuSehat
 {
@@ -28,8 +29,16 @@ class EncounterSatuSehat extends OAuth2 implements ContractsEncounterSatuSehat
 
     public function prepareStoreEncounterSatuSehat(EncounterSatuSehatData $encounter_dto): Model{
         $this->setMethod('POST');
-        $encounter = SatuSehat::store('Encounter',$encounter_dto->form->payload->toArray());
-        $this->encounter_model = $this->logSatuSehat($encounter_dto,SatuSehat::getResponse(),$encounter,SatuSehat::getPayload());
+        try {
+            $encounter = SatuSehat::store('Encounter',$encounter_dto->form->payload->toArray());
+        } catch (\Throwable $th) {
+            Log::channel('satu-sehat')->error("Failed to send encounter to Satu Sehat", [
+                'dto' => $encounter_dto->toArray(),
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString()
+            ]);
+        }
+        $this->encounter_model = $this->logSatuSehat($encounter_dto,SatuSehat::getResponse(),$encounter ?? null,SatuSehat::getPayload());
         return $this->encounter_model;
     }
 

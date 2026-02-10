@@ -41,7 +41,8 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
     }
 
      public function satuSehatLog(mixed $conditionals = null): Builder{
-        return $this->usingEntity()->conditionals($conditionals);
+        // return $this->usingEntity()->conditionals($this->mergeCondition($conditionals));
+        return $this->generalSchemaModel($conditionals);
     }
 
     protected function logSatuSehat(mixed $dto, mixed $response, array|Collection|null $response_data = [], ?array $payload = [], ?array $query_params = []):Model{
@@ -59,10 +60,11 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
         // }else{
             $name = $this->__entity;
         // }
-
+        
         return $this->prepareStoreSatuSehatLog(
             $this->requestDTO(
                 config('app.contracts.SatuSehatLogData'),[
+                    'id' => $dto->id ?? null,
                     'env_type' => config('satu-sehat.environment.env_type'),
                     'url' => SatuSehat::getSatuSehatUrl(),
                     'name' => $name,
@@ -83,7 +85,10 @@ class SatuSehatLog extends BaseSatuSehat implements ContractsSatuSehatLog
         $add = [
             'name' => $satu_sehat_log_dto->name,
             'env_type' => $satu_sehat_log_dto->env_type,
-            'url' => $satu_sehat_log_dto->url
+            'url' => $satu_sehat_log_dto->url,
+            'method' => $satu_sehat_log_dto->method,
+            'reference_type' => $satu_sehat_log_dto->reference_type,
+            'reference_id' => $satu_sehat_log_dto->reference_id
         ];
         $guard  = ['id' => $satu_sehat_log_dto->id];
         $create = [$guard, $add];
