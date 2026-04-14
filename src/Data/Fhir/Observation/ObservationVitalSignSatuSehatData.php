@@ -13,15 +13,15 @@ class ObservationVitalSignSatuSehatData extends Data implements DataObservationV
 {
     #[MapInputName('heart_rate')]
     #[MapName('heart_rate')]
-    public ?int $heart_rate = null;
+    public ?float $heart_rate = null;
 
     #[MapInputName('oxygen_saturation')]
     #[MapName('oxygen_saturation')]
-    public ?int $oxygen_saturation = null;
+    public ?float $oxygen_saturation = null;
 
     #[MapInputName('respiratory_rate')]
     #[MapName('respiratory_rate')]
-    public ?int $respiratory_rate = null;
+    public ?float $respiratory_rate = null;
 
     #[MapInputName('body_temperature')]
     #[MapName('body_temperature')]
@@ -29,11 +29,11 @@ class ObservationVitalSignSatuSehatData extends Data implements DataObservationV
 
     #[MapInputName('body_height')]
     #[MapName('body_height')]
-    public ?int $body_height = null;
+    public ?float $body_height = null;
 
     #[MapInputName('body_weight')]
     #[MapName('body_weight')]
-    public ?int $body_weight = null;
+    public ?float $body_weight = null;
 
     #[MapInputName('body_mass_index')]
     #[MapName('body_mass_index')]
@@ -41,17 +41,36 @@ class ObservationVitalSignSatuSehatData extends Data implements DataObservationV
 
     #[MapInputName('systolic_blood_pressure')]
     #[MapName('systolic_blood_pressure')]
-    public ?int $systolic_blood_pressure = null;
+    public ?float $systolic_blood_pressure = null;
 
     #[MapInputName('diastolic_blood_pressure')]
     #[MapName('diastolic_blood_pressure')]
-    public ?int $diastolic_blood_pressure = null;
+    public ?float $diastolic_blood_pressure = null;
 
     #[MapInputName('value')]
     #[MapName('value')]
     public ?array $value = [];
 
     public static function before(array &$attributes){
+        // Cast all numeric values to float to handle both integer and decimal values safely
+        $numericFields = [
+            'heart_rate',
+            'oxygen_saturation',
+            'respiratory_rate',
+            'body_temperature',
+            'body_height',
+            'body_weight',
+            'body_mass_index',
+            'systolic_blood_pressure',
+            'diastolic_blood_pressure'
+        ];
+
+        foreach ($numericFields as $field) {
+            if (isset($attributes[$field]) && $attributes[$field] !== null && $attributes[$field] !== '') {
+                $attributes[$field] = is_numeric($attributes[$field]) ? (float) $attributes[$field] : null;
+            }
+        }
+
         $weight = $attributes['body_weight'] ?? null;
         $height = $attributes['body_height'] ?? null;
 
